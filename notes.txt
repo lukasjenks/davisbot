@@ -1,0 +1,2 @@
+https://dev.twitch.tv/docs/v5
+https://discuss.dev.twitch.tv/t/check-if-channel-is-live-c-discord/14958/2
