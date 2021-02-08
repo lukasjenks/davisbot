@@ -1,26 +1,26 @@
 module.exports = {
-    picCommand: function(msg, messageArr, db) {
+    picCommand: function(msg, messageArr) {
         switch (messageArr[1]) {
             case "add":
                 if (messageArr.length === 4) {
-                    this.addPic(msg, messageArr, db);
+                    this.addPic(msg, messageArr);
                 } else {
                     msg.channel.send("Improper usage. Usage: !authoradd [name] [picture url] \"[full_name]\"");
                 }
                 break;
             case "like":
                 if (messageArr.length === 3) {
-                    this.fetchPicBySubString(msg, messageArr, db);
+                    this.fetchPicBySubString(msg, messageArr);
                 } else {
                     msg.channel.send("Improper usage. Usage: !piclike [picture name]");
                 }
             case "list":
-                this.listPics(msg, db);
+                this.listPics(msg);
             case "random":
-                this.fetchRandomPic(msg, messageArr, db);
+                this.fetchRandomPic(msg, messageArr);
             case "show":
                 if (messageArr.length === 3) {
-                    this.fetchPicByName(msg, messageArr, db);
+                    this.fetchPicByName(msg, messageArr);
                 } else {
                     msg.channel.send("Improper usage. Usage: !pic show [picture name]");
                 }
@@ -28,7 +28,7 @@ module.exports = {
                 break;
         }
     },
-    addPic: function(msg, messageArr, db) {
+    addPic: function(msg, messageArr) {
         if (messageArr.length !== 4) {
             msg.channel.send("Improper usage. Usage: !pic add [name] [picture url]");
         } else {
@@ -46,7 +46,7 @@ module.exports = {
             });
         }
     },
-    fetchPicByName: function(msg, messageArr, db) {
+    fetchPicByName: function(msg, messageArr) {
         var command = messageArr[1];
         if (messageArr[1] === 'random') {
             db.get('select * from picture', (err, row) => {
@@ -70,7 +70,7 @@ module.exports = {
             });
         }
     },
-    fetchPicBySubString: function(msg, messageArr, db) {
+    fetchPicBySubString: function(msg, messageArr) {
         var command = messageArr[1];
         db.get ('select * from picture where command like ?', '%' + command + '%', (err, row) => {
             if (err) {
@@ -82,7 +82,7 @@ module.exports = {
             }
         });
     },
-    listPics: function(msg, db) {
+    listPics: function(msg) {
         db.all(`select command from picture order by command`, [], (err, picRecs) => {
             if (err) {
                 msg.channel.send("An error occured. Error: " + err.Error);

@@ -1,20 +1,20 @@
 module.exports = {
-    authorCommand: function(msg, messageArr, db) {
+    authorCommand: function(msg, messageArr) {
         switch (messageArr[1]) {
             case "add":
                 if (messageArr.length >= 5 && messageArr[4].charAt(0) !== '"') {
-                    this.addAuthor(msg, messageArr, db);
+                    this.addAuthor(msg, messageArr);
                 } else {
                     msg.channel.send("Improper usage. Usage: !authoradd [name] [picture url] \"[full_name]\"");
                 }
                 break;
             case "list":
-                this.listAuthors(msg, db);
+                this.listAuthors(msg);
             default:
                 break;
         }
     },
-    addAuthor: function(msg, messageArr, db) {
+    addAuthor: function(msg, messageArr) {
         var command = messageArr[2];
         var pictureUrl = messageArr[3];
         var fullName = msg.content.split(/"/)[1];
@@ -27,7 +27,7 @@ module.exports = {
             }
         });
     },
-    listAuthors: function(msg, db) {
+    listAuthors: function(msg) {
         db.all(`select command from author order by command`, [], (err, authorRecs) => {
             if (err) {
                 msg.channel.send("An error occured. Error: " + err.Error);

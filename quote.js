@@ -1,5 +1,5 @@
 module.exports = {
-    quoteCommand: function(msg, messageArr, db) {
+    quoteCommand: function(msg, messageArr) {
         if (messageArr.length < 2) {
             msg.channel.send("Improper usage. Usage: !quote [cmd] [args]");
         }
@@ -8,39 +8,39 @@ module.exports = {
         switch(messageArr[1]) {
             case "add":
                 if (messageArr.length >= 4 && messageArr[3].charAt(0) === '"') {
-                    this.addQuote(msg, messageArr, db);
+                    this.addQuote(msg, messageArr);
                 }
                 break;
             case "author":
                 if (messageArr.length === 3) {
-                    this.fetchQuoteByAuthor(msg, messageArr[2], db);
+                    this.fetchQuoteByAuthor(msg, messageArr[2]);
                 } else {
                     msg.channel.send("Improper usage. Usage: !quote author [name]");
                 }
                 break;
             case "about":
                 if (messageArr.length === 3) {
-                    this.fetchQuoteByTopic(msg, messageArr[2], db);
+                    this.fetchQuoteByTopic(msg, messageArr[2]);
                 } else {
                     msg.channel.send("Improper usage. Usage: !quote about [topic]");
                 }
                 break;
             case "like":
                 if (messageArr.length >= 3 && messageArr[1].charAt(0) === '"') {
-                    this.fetchQuoteBySubString(msg, messageArr[2], db);
+                    this.fetchQuoteBySubString(msg, messageArr[2]);
                 } else {
                     msg.channel.send("Improper usage. Usage: !quotelike \"quote substring here\"");
                 }
                 break;
             case "random":
-                this.fetchRandomQuote(msg, db);
+                this.fetchRandomQuote(msg);
                 break;
             default:
                 msg.channel.send("Invalid quote command. Use !help to view proper usage.");
                 break;
         }
     },
-    addQuote: function(msg, messageArr, db) {
+    addQuote: function(msg, messageArr) {
         let command = messageArr[1];
         let topic = messageArr[2];
         let quote = msg.content.split(/"/)[1];
@@ -60,7 +60,7 @@ module.exports = {
             }
         });
     },
-    fetchQuoteByAuthor: function(msg, name, db) {
+    fetchQuoteByAuthor: function(msg, name) {
         db.get(`select * from quote where authorid = (select id from author where command = ?) order by RANDOM()`, [name], (err, quoteRec) => {
             if (err) {
                 msg.channel.send("An error occured. Usage: !quote [author]. Error: " + err.Error);
@@ -83,7 +83,7 @@ module.exports = {
             }
         });
     },
-    fetchRandomQuote: function(msg, db) {
+    fetchRandomQuote: function(msg) {
         db.get(`select top 1 authorid from quote order by RANDOM()`, (err, quoteRec) => {
             if (err) {
                 msg.channel.send("A error has occured while retrieving the quote. Error: " + err.Error);
@@ -106,7 +106,7 @@ module.exports = {
             }
         });
     },
-    fetchQuoteBySubString: function (msg, db) {
+    fetchQuoteBySubString: function (msg) {
         var subStr = msg.content.split(/"/)[1];
         db.all ('select * from quote where content like ?', '%' + subStr + '%', (err, rows) => {
             if (err) {

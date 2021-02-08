@@ -4,7 +4,7 @@ const auth = require('./auth.json');
 const token = auth.token;
 const MIN_INTERVAL = 2 * 60 * 1000;
 
-// Import 
+// Import helper function modules
 const quote = require('./quote');
 const author = require('./author');
 const picture = require('./picture');
@@ -40,12 +40,12 @@ client.on('message', (msg) => {
         
         switch (messageArr[0]) {
             case "!quote":
-                quote.quoteCommand(msg, messageArr, db);
+                quote.quoteCommand(msg, messageArr);
                 break;
             case "!author":
-                author.authorCommand(msg, messageArr, db);
+                author.authorCommand(msg, messageArr);
             case "!pic":
-                picture.picCommand(msg, messageArr, db);
+                picture.picCommand(msg, messageArr);
             case "!help":
                 utils.helpCommand(msg);
             default:
