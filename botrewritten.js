@@ -19,6 +19,7 @@ let db = new sqlite3.Database('bot.db', (err) => {
 });
 
 const client = new Discord.Client();
+
 client.login(token)
 .catch((err) => {
     console.log("An error occured: " + err);
@@ -50,5 +51,13 @@ client.on('message', (msg) => {
             default:
                 break;
         }
+    } else {
+        var messageArr = msg.content.split(/(\s+)/).filter( function(e) { return e.trim().length > 0; } );
+		if (!msg.author.bot) {
+            msg.content = msg.content.toLowerCase();
+            // Here, you can check to see if msg.content.indexOf("custom string") returns > -1 to check for something
+			// that was said by a user, or msg.author.id to determine the author of the message
+			// and then take the desired action based on this. Lots of potential for fun stuff here.
+		}
     }
 });
