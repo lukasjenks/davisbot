@@ -1,8 +1,8 @@
 {
-  "name": "disciplesbot",
+  "name": "davisbot",
   "version": "1.0.0",
   "description": "",
-  "main": "bot.js",
+  "main": "botrewritten.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
