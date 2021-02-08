@@ -1,6 +1,6 @@
 # Davis Bot
 
-### Summary
+## Summary
 
 Davis Bot is a multipurpose bot made with Node.js/sqlite3 and supports, among other things, persistent custom author (with picture) and custom quote storage and retrieval and persistent custom picture/GIF storage and retrieval.
 
@@ -8,7 +8,7 @@ Davis Bot is a multipurpose bot made with Node.js/sqlite3 and supports, among ot
 
 This bot has recently been rewritten and is currently undergoing maintenance. Some previous features may not work as intended as they are altered and additional features are added.
 
-### Installation
+## Installation
 
 To install Davis Bot, run the following (unix-like OS'):
 
