@@ -1,3 +1,6 @@
+const db = require('./db');
+const Discord = require('discord.js');
+
 module.exports = {
     quoteCommand: function(msg, messageArr) {
         if (messageArr.length < 2) {
@@ -65,7 +68,7 @@ module.exports = {
             if (err) {
                 msg.channel.send("An error occured. Usage: !quote [author]. Error: " + err.Error);
             } else if (quoteRec !== undefined) {
-                db.get('select * from author where command = ?', [command], (err, authorRec) => {
+                db.get('select * from author where command = ?', [name], (err, authorRec) => {
                     if (err) {
                         msg.channel.send("An error occured. Usage: !quote [author]. Error: " + err.Error);
                     } else if (authorRec !== undefined) {

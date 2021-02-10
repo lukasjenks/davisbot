@@ -1,3 +1,6 @@
+const db = require('./db');
+const Discord = require('discord.js');
+
 module.exports = {
     picCommand: function(msg, messageArr) {
         switch (messageArr[1]) {

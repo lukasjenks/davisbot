@@ -1,5 +1,4 @@
 const Discord = require('discord.js');
-const sqlite3 = require('sqlite3').verbose();
 const auth = require('./auth.json');
 const token = auth.token;
 const MIN_INTERVAL = 2 * 60 * 1000;
@@ -9,14 +8,6 @@ const quote = require('./quote');
 const author = require('./author');
 const picture = require('./picture');
 const utils = require('./utils');
-
-// Open DB connection
-let db = new sqlite3.Database('bot.db', (err) => {
-	if (err) {
-		return console.error(err.message);
-	}
-	console.log('Connected to the DB.');
-});
 
 const client = new Discord.Client();
 
