@@ -29,14 +29,11 @@ module.exports = {
                 }
                 break;
             case "like":
-                if (messageArr.length >= 3 && messageArr[1].charAt(0) === '"') {
+                if (messageArr.length >= 3 && messageArr[2].charAt(0) === '"') {
                     this.fetchQuoteBySubString(msg, messageArr[2]);
                 } else {
-                    msg.channel.send("Improper usage. Usage: !quotelike \"quote substring here\"");
+                    msg.channel.send("Improper usage. Usage: !quote like \"quote substring here\"");
                 }
-                break;
-            case "random":
-                this.fetchRandomQuote(msg);
                 break;
             default:
                 msg.channel.send("Invalid quote command. Use !help to view proper usage.");
@@ -64,36 +61,40 @@ module.exports = {
         });
     },
     fetchQuoteByAuthor: function(msg, name) {
-        db.get(`select * from quote where authorid = (select id from author where command = ?) order by RANDOM()`, [name], (err, quoteRec) => {
-            if (err) {
-                msg.channel.send("An error occured. Usage: !quote [author]. Error: " + err.Error);
-            } else if (quoteRec !== undefined) {
-                db.get('select * from author where command = ?', [name], (err, authorRec) => {
-                    if (err) {
-                        msg.channel.send("An error occured. Usage: !quote [author]. Error: " + err.Error);
-                    } else if (authorRec !== undefined) {
-                        const embed = new Discord.RichEmbed()
-                            .setDescription(quoteRec.content)
-                            .setAuthor(authorRec.full_name, authorRec.picture_url)
-                            .setColor('#f50057');
-                        msg.channel.send(embed);
-                    } else {
-                        msg.channel.send("Author not found in the DB.");
-                    }
-                });
-            } else {
-                msg.channel.send("No quotes found for that author in the DB.");
-            }
-        });
+        if (name === "random") {
+            this.fetchRandomQuote(msg);
+        } else {
+            db.get(`select content from quote where authorid = (select id from author where command = ?) order by RANDOM()`, [name], (err, quoteRec) => {
+                if (err) {
+                    msg.channel.send("An error occured. Usage: !quote [author]. Error: " + err.Error);
+                } else if (quoteRec !== undefined) {
+                    db.get('select * from author where command = ?', [name], (err, authorRec) => {
+                        if (err) {
+                            msg.channel.send("An error occured. Usage: !quote [author]. Error: " + err.Error);
+                        } else if (authorRec !== undefined) {
+                            const embed = new Discord.RichEmbed()
+                                .setDescription(quoteRec.content)
+                                .setAuthor(authorRec.full_name, authorRec.picture_url)
+                                .setColor('#f50057');
+                            msg.channel.send(embed);
+                        } else {
+                            msg.channel.send("Author not found in the DB.");
+                        }
+                    });
+                } else {
+                    msg.channel.send("No quotes found for that author in the DB.");
+                }
+            });
+        }
     },
     fetchRandomQuote: function(msg) {
-        db.get(`select top 1 authorid from quote order by RANDOM()`, (err, quoteRec) => {
+        db.get(`select authorid, content from quote order by RANDOM()`, (err, quoteRec) => {
             if (err) {
                 msg.channel.send("A error has occured while retrieving the quote. Error: " + err.Error);
             } else if (quoteRec !== undefined) {
                 db.get('select full_name, picture_url from author where id = ?', [quoteRec.authorid], (err, authorRec) => {
                     if (err) {
-                        msg.channel.send("An error occured. Usage: !quote [author]. Error: " + err.Error);
+                        msg.channel.send("An error occured. Usage: !quote author [name]. Error: " + err.Error);
                     } else if (authorRec !== undefined) {
                         const embed = new Discord.RichEmbed()
                             .setDescription(quoteRec.content)

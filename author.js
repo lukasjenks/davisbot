@@ -13,6 +13,7 @@ module.exports = {
                 break;
             case "list":
                 this.listAuthors(msg);
+                break;
             default:
                 break;
         }

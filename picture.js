@@ -17,16 +17,20 @@ module.exports = {
                 } else {
                     msg.channel.send("Improper usage. Usage: !piclike [picture name]");
                 }
+                break;
             case "list":
                 this.listPics(msg);
+                break;
             case "random":
                 this.fetchRandomPic(msg, messageArr);
+                break;
             case "show":
                 if (messageArr.length === 3) {
                     this.fetchPicByName(msg, messageArr);
                 } else {
                     msg.channel.send("Improper usage. Usage: !pic show [picture name]");
                 }
+                break;
             default:
                 break;
         }
