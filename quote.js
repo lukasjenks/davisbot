@@ -139,30 +139,25 @@ module.exports = {
         });
     },
     fetchQuoteBySubString: function (msg, subStr) {
-        db.all ('select * from quote where content like ?', '%' + subStr + '%', (err, rows) => {
+        db.get('select authorid, content from quote where content like ? order by random() limit 1', '%' + subStr + '%', (err, quoteRec) => {
             if (err) {
-                msg.channel.send("An error occured. Usage: !quotelike \"quote substring here\". Error: " + err.Error);
+                msg.channel.send("An error occured. Usage: !quote like \"quote substring here\". Error: " + err.Error);
+            } else if (quoteRec !== undefined) {
+                db.get('select full_name, picture_url from author where id = ?', quoteRec.authorid, (err, authorRec) => {
+                    if (err) {
+                        msg.channel.send("An error occured. Usage: !quote like \"quote substring here\". Error: " + err.Error);
+                    } else if (authorRec !== undefined) {
+                        const embed = new Discord.RichEmbed()
+                            .setDescription(quoteRec.content)
+                            .setAuthor(authorRec.full_name, authorRec.picture_url)
+                            .setColor('#f50057');
+                        msg.channel.send(embed);
+                    } else {
+                        msg.channel.send("An unexpected error occured; The author associated with the quote to be retrieved was not found in the DB.");
+                    }
+                })
             } else {
-                if (rows.length > 0) {
-                    var row1 = rows[Math.floor(Math.random() * rows.length)];
-                    db.get('select * from author where id = ?', row1.authorid, (err, row2) => {
-                        if (err) {
-                            msg.channel.send("An error occured. Usage: !quotelike \"quote substring here\". Error: " + err.Error);
-                        } else {
-                            if (row2 !== undefined) {
-                                const embed = new Discord.RichEmbed()
-                                    .setDescription(row1.content)
-                                    .setAuthor(row2.full_name, row2.picture_url)
-                                    .setColor('#f50057');
-                                msg.channel.send(embed);
-                            } else {
-                                msg.channel.send("An error occured. Usage: !quotelike \"quote substring here\"");
-                            }
-                        }
-                    })
-                } else {
-                    msg.channel.send("No quote which contains the substring specified was found in the DB.");
-                }
+                msg.channel.send("No quote which contains the substring specified was found in the DB.");
             }
         });
     }

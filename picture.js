@@ -13,7 +13,8 @@ module.exports = {
                 break;
             case "like":
                 if (messageArr.length >= 3 && messageArr[2].charAt(0) === '"') {
-                    this.fetchPicBySubString(msg, messageArr[2]);
+                    let subStr = msg.content.split(/"/)[1];
+                    this.fetchPicBySubString(msg, subStr);
                 } else {
                     msg.channel.send("Improper usage. Usage: !quote like \"quote substring here\"");
                 }
@@ -23,7 +24,8 @@ module.exports = {
                 break;
             case "show":
                 if (messageArr.length === 3) {
-                    this.fetchPicByName(msg, messageArr);
+                    var command = messageArr[2];
+                    this.fetchPicByName(msg, command);
                 } else {
                     msg.channel.send("Improper usage. Usage: !pic show [picture name]");
                 }
@@ -47,8 +49,7 @@ module.exports = {
             });
         }
     },
-    fetchPicByName: function(msg, messageArr) {
-        var command = messageArr[2];
+    fetchPicByName: function(msg, command) {
         if (command === 'random') {
             db.get('select url from picture order by random() limit 1', (err, picRecord) => {
                 if (err) {
@@ -71,15 +72,14 @@ module.exports = {
             });
         }
     },
-    fetchPicBySubString: function(msg) {
-        var subStr = msg.content.split(/"/)[1];
+    fetchPicBySubString: function(msg, subStr) {
         db.get('select url from picture where command like ? order by random() limit 1', '%' + subStr + '%', (err, picRecord) => {
             if (err) {
-                msg.channel.send("An error occured. Usage: !quotelike \"quote substring here\". Error: " + err.Error);
+                msg.channel.send("An error occured. Usage: !pic like \"quote substring here\". Error: " + err.Error);
             } else if (picRecord !== undefined) {
                 msg.channel.send(picRecord.url);
             } else {
-                msg.channel.send("No quote which contains the substring specified was found in the DB.");
+                msg.channel.send("No pic which has a name containing the substring specified was found in the DB.");
             }
         });
     },
