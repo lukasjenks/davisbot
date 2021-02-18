@@ -45,11 +45,6 @@ module.exports = {
                     msg.channel.send("Successfully added picture/gif to DB.");
                 }
             });
-            /*
-            .catch((err) => {
-                msg.channel.send(`Error inserting picture into DB: Error: ${err}`);
-            })
-            */
         }
     },
     fetchPicByName: function(msg, messageArr) {

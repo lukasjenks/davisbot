@@ -16,7 +16,11 @@ module.exports = {
                 break;
             case "author":
                 if (messageArr.length === 3) {
-                    this.fetchQuoteByAuthor(msg, messageArr[2]);
+                    if (messageArr[2] == 'random') {
+                        this.fetchRandomQuote(msg);
+                    } else {
+                        this.fetchQuoteByAuthor(msg, messageArr[2]);
+                    }
                 } else {
                     msg.channel.send("Improper usage. Usage: !quote author [name]");
                 }
@@ -30,7 +34,8 @@ module.exports = {
                 break;
             case "like":
                 if (messageArr.length >= 3 && messageArr[2].charAt(0) === '"') {
-                    this.fetchQuoteBySubString(msg, messageArr[2]);
+                    let subStr = msg.content.split(/"/)[1];
+                    this.fetchQuoteBySubString(msg, subStr);
                 } else {
                     msg.channel.send("Improper usage. Usage: !quote like \"quote substring here\"");
                 }
@@ -41,13 +46,13 @@ module.exports = {
         }
     },
     addQuote: function(msg, messageArr) {
-        let command = messageArr[1];
-        let topic = messageArr[2];
+        let command = messageArr[2];
+        let topic = messageArr[3];
         let quote = msg.content.split(/"/)[1];
-        db.get('select * from author where command = ?', [command], (err, authorRec) => {
+        db.get('select id from author where command = ?', [command], (err, authorRec) => {
             if (err) {
                 msg.channel.send("An error occured. Usage: !quoteadd [author] [topic] \"[quote]\". Error: " + err.Error);
-            } else if (row1 !== undefined) {
+            } else if (authorRec !== undefined) {
                 db.run('insert into quote (authorid, topic, content) values (?, ?, ?)', [authorRec.id, topic, quote], (err) => {
                     if (err) {
                         msg.channel.send("An error occured. Usage: !quoteadd [author] [topic] \"[quote]\". Error: " + err.Error);
@@ -87,6 +92,29 @@ module.exports = {
             });
         }
     },
+    fetchQuoteByTopic: function(msg, topic) {
+        db.get(`select authorid, content from quote where topic = ? order by random() limit 1`, [topic], (err, quoteRec) => {
+            if (err) {
+                msg.channel.send("An error has occured while retrieving the quote. Error: " + err.Error);
+            } else if (quoteRec !== undefined) {
+                db.get('select full_name, picture_url from author where id = ?', [quoteRec.authorid], (err, authorRec) => {
+                    if (err) {
+                        msg.channel.send("An error occured. Usage: !quote about [topic]. Error: " + err.Error);
+                    } else if (authorRec !== undefined) {
+                        const embed = new Discord.RichEmbed()
+                            .setDescription(quoteRec.content)
+                            .setAuthor(authorRec.full_name, authorRec.picture_url)
+                            .setColor('#f50057');
+                        msg.channel.send(embed);
+                    } else {
+                        msg.channel.send("An unexpected error has occured: the author of the quote retrieved was not found in the DB.");
+                    }
+                })
+            } else {
+                msg.channel.send
+            }
+        });
+    },
     fetchRandomQuote: function(msg) {
         db.get(`select authorid, content from quote order by RANDOM()`, (err, quoteRec) => {
             if (err) {
@@ -102,7 +130,7 @@ module.exports = {
                             .setColor('#f50057');
                         msg.channel.send(embed);
                     } else {
-                        msg.channel.send("No quotes found in the DB.");
+                        msg.channel.send("An unexpected error has occured: the author of the quote retrieved was not found in the DB.");
                     }
                 });
             } else {
@@ -110,8 +138,7 @@ module.exports = {
             }
         });
     },
-    fetchQuoteBySubString: function (msg) {
-        var subStr = msg.content.split(/"/)[1];
+    fetchQuoteBySubString: function (msg, subStr) {
         db.all ('select * from quote where content like ?', '%' + subStr + '%', (err, rows) => {
             if (err) {
                 msg.channel.send("An error occured. Usage: !quotelike \"quote substring here\". Error: " + err.Error);
