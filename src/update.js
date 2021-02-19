@@ -20,17 +20,16 @@ module.exports = {
                     msg.channel.send("Improper usage. Usage: !update author [name/picture] [name] [\"Full Name\"/picture_url]")
                 }
                 break;
-            case "quote":
-                break;
             case "pic":
                 if (messageArr.length === 4) {
                     let picName = messageArr[2];
                     let newPicUrl = messageArr[3];
                     this.updatePictureUrl(msg, picName, newPicUrl);
-                    break;
                 } else {
                     msg.channel.send("Improper usage. Usage: !update pic [picture_name] [picture_url]");
                 }
+                break;
+            default:
                 break;
         }
     },
