@@ -4,10 +4,11 @@ const token = auth.token;
 const MIN_INTERVAL = 2 * 60 * 1000;
 
 // Import helper function modules
-const quote = require('./quote');
-const author = require('./author');
-const picture = require('./picture');
-const utils = require('./utils');
+const quote = require('./src/quote');
+const author = require('./src/author');
+const picture = require('./src/picture');
+const utils = require('./src/utils');
+const update = require('./src/update');
 
 const client = new Discord.Client();
 
@@ -30,17 +31,20 @@ client.on('message', (msg) => {
         var messageArr = msg.content.split(/(\s+)/).filter( function(e) { return e.trim().length > 0; } );
         
         switch (messageArr[0]) {
-            case "!quote":
-                quote.quoteCommand(msg, messageArr);
-                break;
             case "!author":
                 author.authorCommand(msg, messageArr);
+                break;
+            case "!help":
+                utils.helpCommand(msg);
                 break;
             case "!pic":
                 picture.picCommand(msg, messageArr);
                 break;
-            case "!help":
-                utils.helpCommand(msg);
+            case "!quote":
+                quote.quoteCommand(msg, messageArr);
+                break;
+            case "!update":
+                update.updateCommand(msg, messageArr);
                 break;
             default:
                 break;

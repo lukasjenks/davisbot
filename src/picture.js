@@ -8,7 +8,7 @@ module.exports = {
                 if (messageArr.length === 4) {
                     this.addPic(msg, messageArr);
                 } else {
-                    msg.channel.send("Improper usage. Usage: !authoradd [name] [picture url] \"[full_name]\"");
+                    msg.channel.send("Improper usage. Usage: !pic add [name] [picture url]");
                 }
                 break;
             case "like":
@@ -35,19 +35,15 @@ module.exports = {
         }
     },
     addPic: function(msg, messageArr) {
-        if (messageArr.length !== 4) {
-            msg.channel.send("Improper usage. Usage: !pic add [name] [picture url]");
-        } else {
-            var command = messageArr[2];
-            var pictureUrl = messageArr[3];
-            db.run('insert into picture (command, url) values (?, ?)', [command, pictureUrl], (err) => {
-                if (err) {
-                    msg.channel.send("An error occured. Usage: !picadd [name] [picture url]. Error: " + err.Error);
-                } else {
-                    msg.channel.send("Successfully added picture/gif to DB.");
-                }
-            });
-        }
+        let command = messageArr[2];
+        let pictureUrl = messageArr[3];
+        db.run('insert into picture (command, url) values (?, ?)', [command, pictureUrl], (err) => {
+            if (err) {
+                msg.channel.send("An error occured. Usage: !pic add [name] [picture url]. Error: " + err.Error);
+            } else {
+                msg.channel.send("Successfully added picture/gif to DB.");
+            }
+        });
     },
     fetchPicByName: function(msg, command) {
         if (command === 'random') {
