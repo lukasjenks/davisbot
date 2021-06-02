@@ -4,6 +4,8 @@
 
 DAVIS is a multipurpose bot made with Node.js/sqlite3 and supports, among other things, persistent custom author (with picture) and custom quote storage and retrieval and persistent custom picture/GIF storage and retrieval.
 
+Please note that this project was written some time ago and needs to be refactored/improved.
+
 ## Note
 
 This bot has recently been rewritten and is currently undergoing maintenance and further development. Some previous features may not work as before as they are altered and additional features are added.
