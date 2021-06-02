@@ -22,5 +22,6 @@ touch bot.db
 touch auth.json
 # edit auth.json to contain your Discord bot's token as the value in a key value pair with the key "token"
 # edit bot.js line 20 to use your server's specific channel ID
+# run migration scripts against bot.db (goose migration templates provided for golang's goose package - see https://github.com/pressly/goose)
 node bot.js
 ```
