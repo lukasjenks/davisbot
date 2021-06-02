@@ -9,10 +9,12 @@ module.exports = {
     
         // Identify and respond to subcommands
         switch(messageArr[1]) {
-            case "add":
-                if (messageArr.length >= 4 && messageArr[3].charAt(0) === '"') {
+        case "add":
+                if (messageArr.length >= 4 && messageArr[4].charAt(0) === '"') {
                     this.addQuote(msg, messageArr);
-                }
+                } else {
+		    msg.channel.send("Improper usage. Usage: !quote add [author] [topic] [\"quote here\"]");
+		}
                 break;
             case "author":
                 if (messageArr.length === 3) {
