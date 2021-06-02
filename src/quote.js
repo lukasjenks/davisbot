@@ -53,7 +53,7 @@ module.exports = {
             if (err) {
                 msg.channel.send("An error occured. Usage: !quoteadd [author] [topic] \"[quote]\". Error: " + err.Error);
             } else if (authorRec !== undefined) {
-                db.run('insert into quote (authorid, topic, content) values (?, ?, ?)', [authorRec.id, topic, quote], (err) => {
+                db.run('insert into quote (author_id, topic, content) values (?, ?, ?)', [authorRec.id, topic, quote], (err) => {
                     if (err) {
                         msg.channel.send("An error occured. Usage: !quoteadd [author] [topic] \"[quote]\". Error: " + err.Error);
                     } else {
@@ -69,7 +69,7 @@ module.exports = {
         if (name === "random") {
             this.fetchRandomQuote(msg);
         } else {
-            db.get(`select content from quote where authorid = (select id from author where command = ?) order by RANDOM()`, [name], (err, quoteRec) => {
+            db.get(`select content from quote where author_id = (select id from author where command = ?) order by RANDOM()`, [name], (err, quoteRec) => {
                 if (err) {
                     msg.channel.send("An error occured. Usage: !quote [author]. Error: " + err.Error);
                 } else if (quoteRec !== undefined) {
@@ -93,11 +93,11 @@ module.exports = {
         }
     },
     fetchQuoteByTopic: function(msg, topic) {
-        db.get(`select authorid, content from quote where topic = ? order by random() limit 1`, [topic], (err, quoteRec) => {
+        db.get(`select author_id, content from quote where topic = ? order by random() limit 1`, [topic], (err, quoteRec) => {
             if (err) {
                 msg.channel.send("An error has occured while retrieving the quote. Error: " + err.Error);
             } else if (quoteRec !== undefined) {
-                db.get('select full_name, picture_url from author where id = ?', [quoteRec.authorid], (err, authorRec) => {
+                db.get('select full_name, picture_url from author where id = ?', [quoteRec.author_id], (err, authorRec) => {
                     if (err) {
                         msg.channel.send("An error occured. Usage: !quote about [topic]. Error: " + err.Error);
                     } else if (authorRec !== undefined) {
@@ -116,11 +116,11 @@ module.exports = {
         });
     },
     fetchRandomQuote: function(msg) {
-        db.get(`select authorid, content from quote order by RANDOM()`, (err, quoteRec) => {
+        db.get(`select author_id, content from quote order by RANDOM()`, (err, quoteRec) => {
             if (err) {
                 msg.channel.send("A error has occured while retrieving the quote. Error: " + err.Error);
             } else if (quoteRec !== undefined) {
-                db.get('select full_name, picture_url from author where id = ?', [quoteRec.authorid], (err, authorRec) => {
+                db.get('select full_name, picture_url from author where id = ?', [quoteRec.author_id], (err, authorRec) => {
                     if (err) {
                         msg.channel.send("An error occured. Usage: !quote author [name]. Error: " + err.Error);
                     } else if (authorRec !== undefined) {
@@ -139,11 +139,11 @@ module.exports = {
         });
     },
     fetchQuoteBySubString: function (msg, subStr) {
-        db.get('select authorid, content from quote where content like ? order by random() limit 1', '%' + subStr + '%', (err, quoteRec) => {
+        db.get('select author_id, content from quote where content like ? order by random() limit 1', '%' + subStr + '%', (err, quoteRec) => {
             if (err) {
                 msg.channel.send("An error occured. Usage: !quote like \"quote substring here\". Error: " + err.Error);
             } else if (quoteRec !== undefined) {
-                db.get('select full_name, picture_url from author where id = ?', quoteRec.authorid, (err, authorRec) => {
+                db.get('select full_name, picture_url from author where id = ?', quoteRec.author_id, (err, authorRec) => {
                     if (err) {
                         msg.channel.send("An error occured. Usage: !quote like \"quote substring here\". Error: " + err.Error);
                     } else if (authorRec !== undefined) {
