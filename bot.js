@@ -11,6 +11,7 @@ const picture = require('./src/picture');
 const utils = require('./src/utils');
 const update = require('./src/update');
 const emoji = require('./src/emoji');
+const ascii = require('./src/ascii');
 
 const client = new Discord.Client();
 
@@ -46,6 +47,9 @@ client.on('message', (msg) => {
                 break;
             case "!update":
                 update.updateCommand(msg, messageArr);
+                break;
+            case "!ascii":
+                ascii.draw(msg, messageArr);
                 break;
             default:
                 break;
