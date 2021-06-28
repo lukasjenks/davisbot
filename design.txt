@@ -1,0 +1,28 @@
+Project Structure:
+
+.
+├── auth.json [contains authentication token for Discord server]
+├── bot.js [main server file which connects to Discord server]
+├── db
+│   ├── bot.db [sqlite3 DB]
+│   └── migrations [contains go/goose sql migration scripts; see https://github.com/pressly/goose]
+│       ├── 001_init.sql
+│       └── 002_populate.sql
+├── design.txt [this file - provides design documentation]
+├── package.json [for node.js]
+├── package-lock.json [for node.js]
+├── README.md [github md readme]
+└── src
+    ├── cfg [contains config values pertaining to source code]
+    │   └── regex.json
+    ├── cmd [contains js files for major commands]
+    │   ├── ascii.js
+    │   ├── author.js
+    │   ├── help.js
+    │   ├── pic.js
+    │   ├── quote.js
+    │   └── update.js
+    └── lib [contains supplemental js dependency files]
+        ├── db.js
+        ├── emoji.js
+        └── utils.js

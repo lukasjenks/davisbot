@@ -1,15 +1,16 @@
 const figlet = require('figlet');
 
-
-exports.draw = (msg, msgArr) => {
-    if (msgArr.length > 1) {
-        msgArr.splice(0, 1);
-        let messageString = msgArr.join(" ");
+let fnWrapper = [];
+fnWrapper['cmdHandler'] = (msgInfo) => {
+    if (msgInfo.msgArr.length > 1) {
+        msgInfo.msgArr.splice(0, 1);
+        let messageString = msgInfo.msgArr.join(" ");
 
         if (/^[0-9a-zA-Z=!?]{1,}$/.test(messageString)) {
             figlet(messageString, (err, data) => {
                 if (err) {
-                    console.log('Something went wrong...');
+                    msg.channel.send("An error occured converting your string to ascii.")
+                    console.log('Error calling figlet to generate ascii');
                     console.dir(err);
                     return;
                 }
@@ -20,6 +21,8 @@ exports.draw = (msg, msgArr) => {
             });
         }
     } else {
-        msg.channel.send("Must include a valid argument!");
+        msg.channel.send("Must include a string to convert to ascii.");
     }
 }
+
+module.exports = { fnWrapper };
