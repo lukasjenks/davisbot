@@ -47,7 +47,7 @@ client.on('message', (msg) => {
         } else {
             // split message content on whitespace to isolate into individual char groups
             // var messageArr = msg.content.split(/(\s+)/).filter( function(e) { return e.trim().length > 0; } );
-            if (msg.content.match(/^[^\s]+\s+\*\s+[0-9]+$/)) {
+            if (msg.content.match(/^[^\s]+\s*\*\s*[0-9]+$/)) {
                 let msgInfo = utils.getMsgInfo(msg);
                 emoji.multiply(msgInfo, client);
                 // TODO: add chat.replyToUser() functionality here
