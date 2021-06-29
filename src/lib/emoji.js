@@ -2,7 +2,7 @@ const regex = require('../cfg/regex.json');
 const utils = require('./utils');
 
 let containsEmoji = (msgString) => {
-  var emojiPattern = String.raw(regex.genericEmoji);
+  let emojiPattern = Buffer.from(regex.genericEmojiBase64, 'base64').toString();
   return new RegExp(emojiPattern).test(msgString);
 }
 

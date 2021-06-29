@@ -11,42 +11,42 @@ class Update {
         this.name = name;
     }
 
-    updateAuthorName() {
+    updateAuthorName(channel) {
         db.run('update author set full_name = ? where command = ?', [this.name, this.resourceName], (err) => {
             if (err) {
-                msg.channel.send("An error occured. Error: " + err);
+                channel.send("An error occured. Error: " + err);
             } else {
-                msg.channel.send("Successfully changed the author's full name.");
+                channel.send("Successfully changed the author's full name.");
             }
         });
     }
 
-    updateAuthorPic() {
+    updateAuthorPic(channel) {
         db.run('update author set picture_url = ? where command = ?', [this.newUrl, this.resourceName], (err) => {
             if (err) {
-                msg.channel.send("An error occured. Error: " + err.Error);
+                channel.send("An error occured. Error: " + err.Error);
             } else {
-                msg.channel.send("Successfully changed the author's picture.");
+                channel.send("Successfully changed the author's picture.");
             }
         });
     }
 
-    updatePicUrl() {
+    updatePicUrl(channel) {
         db.run('update picture set url = ? where command = ?', [this.newUrl, this.resourceName], (err) => {
             if (err) {
-                msg.channel.send("An error occured. Error: " + err.Error);
+                channel.send("An error occured. Error: " + err.Error);
             } else {
-                msg.channel.send("Successfully changed the specified picture's url.");
+                channel.send("Successfully changed the specified picture's url.");
             }
         });
     }
 
-    updatePicName() {
+    updatePicName(channel) {
         db.run('update picture set command = ? where url = ?', [this.name, this.newUrl], (err) => {
             if (err) { 
-                msg.channel.send("An error occured. Error: " + err.Error);
+                channel.send("An error occured. Error: " + err.Error);
             } else {
-                msg.channel.send("Successfully changed pic name associated with specified url.");
+                channel.send("Successfully changed pic name associated with specified url.");
             }
         });
     }
@@ -68,11 +68,12 @@ fnWrapper['cmdHandler'] = (msgInfo) => {
 
     let update = fields[1] === "url" ? new Update(fields[1], fields[2], fields[3], fields[4], null) :
                                        new Update(fields[1], fields[2], fields[3], null, fields[4]);
-    try {
+
+    if (fields !== null) {
         // Call appropriate class function dynamically - e.g. updatePicUrl
-        update["update" + utils.titleCase(fields[1]) + utils.titleCase(fields[2])]();
-    } catch (err) {
-        utils.handleError(err, msgInfo.channel);
+        update["update" + utils.titleCase(fields[1]) + utils.titleCase(fields[2])](msgInfo.channel);
+    } else {
+        utils.invalidUsage("!update", msgInfo.channel);
     }
 }
 

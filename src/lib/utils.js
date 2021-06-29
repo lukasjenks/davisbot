@@ -32,6 +32,10 @@ module.exports = {
         
     },
 
+    isDigit: function (char) {
+        return !isNaN(parseInt(char));
+    },
+
     /*
     Generic error handler.
     TODO: Add logging to log file, and structured error messages.

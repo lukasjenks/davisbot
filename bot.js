@@ -14,7 +14,7 @@ const emoji = require('./src/lib/emoji');
 
 const cmdModules = {quote,author,pic,update,help,ascii};
 
-const utils = require('./lib/utils');
+const utils = require('./src/lib/utils');
 
 const client = new Discord.Client();
 
