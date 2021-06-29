@@ -6,7 +6,7 @@ class Update {
     constructor(subCmd, subSubCmd, resourceName, url, name) {
         this.subCmd = subCmd;
         this.subSubCmd = subSubCmd;
-        this.resourceName = resourceName.lower();
+        this.resourceName = resourceName ? resourceName.toLowerCase() : null;
         this.url = url;
         this.name = name;
     }
@@ -62,17 +62,17 @@ fnWrapper['cmdHandler'] = (msgInfo) => {
     let fields = msgInfo.content.match(/^\s*\!update\s+(author|pic)\s+(name|pic|url)\s+([^\s]+)\s+([^\s]{1}.+)$/);
 
     if (fields === null) {
-        utils.invalidUsage("!update");
+        utils.invalidUsage("!update", msgInfo.channel);
         return;
     }
 
-    let update = fields[1] === "url" ? new Update(fields[0], fields[1], fields[2], fields[3], null) :
-                                       new Update(fields[0], fields[1], fields[2], null, fields[3]);
+    let update = fields[1] === "url" ? new Update(fields[1], fields[2], fields[3], fields[4], null) :
+                                       new Update(fields[1], fields[2], fields[3], null, fields[4]);
     try {
         // Call appropriate class function dynamically - e.g. updatePicUrl
-        update["update" + utils.titleCase(fields[0]) + utils.titleCase(fields[1])]();
+        update["update" + utils.titleCase(fields[1]) + utils.titleCase(fields[2])]();
     } catch (err) {
-        utils.handleError(err, msgInfo.msg.channel);
+        utils.handleError(err, msgInfo.channel);
     }
 }
 

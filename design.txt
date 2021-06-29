@@ -26,3 +26,11 @@ Project Structure:
         ├── db.js
         ├── emoji.js
         └── utils.js
+
+Regex update:
+Done:
+-bot.js
+-update.js
+-pic.js
+-ascii.js
+-author.js

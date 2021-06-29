@@ -4,24 +4,23 @@ const utils = require('../lib/utils');
 
 class Pic {
 
-    constructor(subCmd, name, url) {
+    constructor(subCmd, name=null, url=null) {
         this.subCmd = subCmd;
-        this.name = name;
+        this.name = name ? name.toLowerCase() : null;
         this.url = url;
     }
 
-    addPic () {
-        db.run('insert into picture (command, url) values (?, ?)', [command, pictureUrl], (err) => {
+    picAdd(channel) {
+        db.run('insert into picture (command, url) values (?, ?)', [this.name, this.url], (err) => {
             if (err) {
-                msg.channel.send("An error occured. Usage: !pic add [name] [picture url]. Error: " + err.Error);
+                channel.send("An error occured. Usage: !pic add [name] [picture url]. Error: " + err.Error);
             } else {
-                msg.channel.send("Successfully added picture/gif to DB.");
+                channel.send("Successfully added picture/gif to DB.");
             }
         });
     }
 
-    // done
-    fetchPicByName () {
+    picShow(channel) {
         if (this.subCmd === 'random') {
             db.get('select url from picture order by random() limit 1', (err, picRecord) => {
                 if (err) {
@@ -35,45 +34,45 @@ class Pic {
         } else {
             db.get('select url from picture where command = ?', [this.name], (err, picRecord) => {
                 if (err) {
-                    msg.channel.send("An error occured. Usage: !pic show [picture name]. Error: " + err.Error);
+                    channel.send("An error occured. Usage: !pic show [picture name]. Error: " + err.Error);
                 } else if (picRecord !== undefined) {
-                    msg.channel.send(picRecord.url);
+                    channel.send(picRecord.url);
                 } else {
-                    msg.channel.send("Picture/gif named not found in the DB.");
+                    channel.send("Picture/gif named not found in the DB.");
                 }
             });
         }
     }
 
-    fetchPicBySubString() {
-        db.get('select url from picture where command like ? order by random() limit 1', '%' + subStr + '%', (err, picRecord) => {
+    picLike(channel) {
+        db.get('select url from picture where command like ? order by random() limit 1', '%' + this.name + '%', (err, picRecord) => {
             if (err) {
-                msg.channel.send("An error occured. Usage: !pic like \"quote substring here\". Error: " + err.Error);
+                channel.send("An error occured. Usage: !pic like \"quote substring here\". Error: " + err.Error);
             } else if (picRecord !== undefined) {
-                msg.channel.send(picRecord.url);
+                channel.send(picRecord.url);
             } else {
-                msg.channel.send("No pic which has a name containing the substring specified was found in the DB.");
+                channel.send("No pic which has a name containing the substring specified was found in the DB.");
             }
         });
     }
 
-    listPics() {
+    picList(channel) {
         db.all(`select command from picture order by command`, [], (err, picRecs) => {
             if (err) {
-                msg.channel.send("An error occured. Error: " + err.Error);
+                channel.send("An error occured. Error: " + err.Error);
             } else {
                 let message = "Available Pictures/GIFs in DB:\n";
                 picRecs.forEach((picRec) => {
                     message = message + picRec.command + "\n";
                 });
-                msg.channel.send(message);
+                channel.send(message);
             }
         });
     }
 }
 
 let fnWrapper = [];
-fnWrapper["cmdHander"] = (msgInfo) => {
+fnWrapper["cmdHandler"] = (msgInfo) => {
     if (msgInfo.msgArr.length >= 2) {
         let fields = null;
         switch (msgInfo.msgArr[1]) {
@@ -87,17 +86,29 @@ fnWrapper["cmdHander"] = (msgInfo) => {
                 fields = msgInfo.content.match(/^\s*\!pic\s+(list)\s*$/);
                 break;
             case "show": //3 args
-                if (messageArr.length === 3) {
-                    var command = messageArr[2];
-                    this.fetchPicByName(msg, command);
-                } else {
-                    msg.channel.send("Improper usage. Usage: !pic show [name]");
-                }
+                fields = msgInfo.content.match(/^\s*\!pic\s+(show)\s+([^\s]+)\s*$/);
                 break;
             default:
+                utils.invalidUsage("!pic", msgInfo.channel);
                 break;
         }
+
+        if (fields === null) {
+            utils.invalidUsage("!pic", msgInfo.channel);
+            return;
+        }
+        
+        // Not included constructor args will default to null
+        fields = fields.slice(1, fields.length);
+        let pic = new Pic(...fields); // slice as first element and last 2 elements are not extracted fields
+
+
+        // Call appropriate class function dynamically - e.g. picAdd
+        pic["pic" + utils.titleCase(fields[0])](msgInfo.channel);
+
     } else {
         utils.invalidUsage("!pic", msgInfo.channel);
     }
 }
+
+module.exports = { fnWrapper };

@@ -9,7 +9,7 @@ fnWrapper['cmdHandler'] = (msgInfo) => {
         if (/^[0-9a-zA-Z=!?]{1,}$/.test(messageString)) {
             figlet(messageString, (err, data) => {
                 if (err) {
-                    msg.channel.send("An error occured converting your string to ascii.")
+                    msgInfo.channel.send("An error occured converting your string to ascii.")
                     console.log('Error calling figlet to generate ascii');
                     console.dir(err);
                     return;
@@ -17,11 +17,11 @@ fnWrapper['cmdHandler'] = (msgInfo) => {
                 let total = "```"; // this allows it to format nicelyish in discord
                 total += data;
                 total += "```";
-                msg.channel.send(total);
+                msgInfo.channel.send(total);
             });
         }
     } else {
-        msg.channel.send("Must include a string to convert to ascii.");
+        msgInfo.channel.send("Must include a string to convert to ascii.");
     }
 }
 
