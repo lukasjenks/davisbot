@@ -16,8 +16,8 @@ let isServerEmoji = (emoji, client) => {
 };
 
 let sendEmojiNTimes = (emoji, n, channel) => {
-    // Standard emojis are double in size so 2000 emojis == 4000 characters
-    // Server emojis are just characters that render as emoji so char count is sufficient
+    // Discord has 2000 character limit, depending on server emoji
+    // tag length the number of characters varies
     let msgToSend = "";
     for (let i = 0; i < n; i++) {
         msgToSend += emoji;
@@ -31,7 +31,9 @@ let sendEmojiNTimes = (emoji, n, channel) => {
 };
 
 let multiply = (msgInfo, client) => {
-    let params = msgInfo.content.match(/^\s*([^\s]+)\s*\*\s*([0-9]+)\s*$/);
+    // Check if it msg matches [emoji] * [num] or [num] * [emoji]
+    let params = (msgInfo.content.match(/^\s*([^\s]+)\s*\*\s*([0-9]+)\s*$/) || 
+                  msgInfo.content.match(/^\s*([0-9]+)\s*\*\s*([^\s]+)\s*$/));
     if (params !== null) {
         let emoji = params[1];
         let n = parseInt(params[2]);
