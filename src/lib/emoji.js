@@ -1,48 +1,45 @@
-const regex = require('../cfg/regex.json');
-const utils = require('./utils');
+const utils = require("./utils");
+const regex = require("../cfg/regex.json");
 
-let containsEmoji = (msgString) => {
-  let emojiPattern = Buffer.from(regex.genericEmojiBase64, 'base64').toString();
-  return new RegExp(emojiPattern).test(msgString);
-}
+let containsEmoji = (emoji) => {
+    let emojiPattern = Buffer.from(regex.genericEmojiBase64, "base64").toString();
+    return new RegExp(emojiPattern).test(emoji);
+};
 
 let isServerEmoji = (emoji, client) => {
-  if (/^<:.{1,}:[0-9]{1,}>$/.test(emoji)) { // test if it matches custom emoji regex
-    let emojiId = emoji.match(/[0-9]{1,}/)[0];
-    if (client.emojis.find((value) => value.id == emojiId)) {
+    let emojiFields = emoji.match(/^<:.+:([0-9]+)>$/);
+    let emojiNum = emojiFields ? emojiFields[1] : null;
+    if (emojiNum && client.emojis.find(value => value.id == emojiNum)) {
       return true;
     }
     return false;
-  }
-  return false;
-}
+};
 
 let sendEmojiNTimes = (emoji, n, channel) => {
-  let total = "";
+    // Standard emojis are double in size so 2000 emojis == 4000 characters
+    // Server emojis are just characters that render as emoji so char count is sufficient
+    let msgToSend = "";
+    for (let i = 0; i < n; i++) {
+        msgToSend += emoji;
+    }
 
-  for (let i = 0; i < n; i++) {
-    total += emoji;
-  }
-
-  if (total.length <= 4000) { //emojis actually are double in size aka 2000 emojis == 4000 characters
-    channel.send(total);
-  } else {
-    channel.send("Character limit of 2000 exceeded.");
-  }
-}
+    if (msgToSend.length > 2000) {
+      channel.send("Character limit exceeded.");
+    } else {
+      channel.send(msgToSend);
+    }
+};
 
 let multiply = (msgInfo, client) => {
-  let splitStar = msgInfo.content.split("*"); // better way of checking if the * character exists since we will use the array anyways
-  if (splitStar.length > 1) {
-    let left = splitStar[0].trim().split(" ");
-    let right = splitStar[1].trim().split(" ");
+    let params = msgInfo.content.match(/^\s*([^\s]+)\s*\*\s*([0-9]+)\s*$/);
+    if (params !== null) {
+        let emoji = params[1];
+        let n = parseInt(params[2]);
 
-    if ((containsEmoji(right[0]) || isServerEmoji(right[0], client)) && utils.isDigit(left[left.length - 1])) {
-      sendEmojiNTimes(right[0], parseInt(left[left.length - 1]), msgInfo.channel);
-    } else if ((containsEmoji(left[left.length - 1]) || isServerEmoji(left[left.length - 1], client)) && utils.isDigit(right[0])) {
-      sendEmojiNTimes(left[left.length - 1], parseInt(right[0]), msgInfo.channel);
+        if (containsEmoji(emoji) || isServerEmoji(emoji, client)) {
+          sendEmojiNTimes(emoji, n, msgInfo.channel);
+        }
     }
-  }
-}
+};
 
 exports.multiply = multiply;

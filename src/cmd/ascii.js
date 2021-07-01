@@ -6,7 +6,7 @@ fnWrapper['cmdHandler'] = (msgInfo) => {
         msgInfo.msgArr.splice(0, 1);
         let messageString = msgInfo.msgArr.join(" ");
 
-        if (/^[0-9a-zA-Z=!?]{1,}$/.test(messageString)) {
+        if (/^[0-9a-zA-Z=!\?\s]+$/.test(messageString)) {
             figlet(messageString, (err, data) => {
                 if (err) {
                     msgInfo.channel.send("An error occured converting your string to ascii.")
