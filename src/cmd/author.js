@@ -46,6 +46,7 @@ const cmdHandler = (msgInfo) => {
     switch (msgInfo.msgArr[1]) {
         case "add":
             fields = msgInfo.content.match(msgInfo.regex.authorAddCmd);
+            break;
         case "list":
             fields = msgInfo.content.match(msgInfo.regex.authorListCmd);
             break;

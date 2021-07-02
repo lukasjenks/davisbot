@@ -15,7 +15,7 @@ class Quote {
             if (err) {
                 channel.send("An error occured. Usage: !quoteadd [author] [topic] \"[quote]\". Error: " + err.Error);
             } else if (authorRec !== undefined) {
-                db.run('insert into quote (author_id, topic, content) values (?, ?, ?)', [authorRec.id, topic, quote], (err) => {
+                db.run('insert into quote (author_id, topic, content) values (?, ?, ?)', [authorRec.id, this.topic, this.quote], (err) => {
                     if (err) {
                         channel.send("An error occured. Usage: !quoteadd [author] [topic] \"[quote]\". Error: " + err.Error);
                     } else {

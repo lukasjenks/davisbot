@@ -1,5 +1,5 @@
 let containsEmoji = (emoji, regex) => {
-    return regex.emojiPattern.test(emoji);
+    return regex.genericEmoji.test(emoji);
 };
 
 let isServerEmoji = (emoji, regex, client) => {
@@ -19,26 +19,22 @@ let sendEmojiNTimes = (emoji, n, channel) => {
         msgToSend += emoji;
     }
 
-    if (msgToSend.length > 2000) {
-      channel.send("Character limit exceeded.");
-    } else {
-      channel.send(msgToSend);
-    }
+	msgToSend.length > 2000 ? channel.send("Character limit exceeded.") : channel.send(msgToSend);
 };
 
-let multiply = (msgInfo, regex, client) => {
+let multiply = (msgInfo) => {
     // Check if msg content matches [emoji] * [num] or [num] * [emoji]
 
     let cmdInfo = null;
-    if (cmdInfo = msgInfo.content.match(regex.leftEmoji)) {
+    if (cmdInfo = msgInfo.content.match(msgInfo.regex.leftEmojiCmd)) {
         var emoji = cmdInfo[1];
-        var n = parseInt(cmdInfo[3]);
-    } else if (cmdInfo = msgInfo.content.match(regex.rightEmoji)){
-        var emoji = cmdInfo[3];
-        var n = parseInt(cmdInfo[1]);
+        var n = parseInt(cmdInfo[2]);
+    } else if (cmdInfo = msgInfo.content.match(msgInfo.regex.rightEmojiCmd)){
+        var emoji = cmdInfo[2];
+        var n = parseInt(cmdInfo[2]);
     }
 
-    if (containsEmoji(emoji, regex) || isServerEmoji(emoji, regex, client)) {
+    if (containsEmoji(emoji, msgInfo.regex) || isServerEmoji(emoji, msgInfo.regex, msgInfo.client)) {
         sendEmojiNTimes(emoji, n, msgInfo.channel);
     }
 };
