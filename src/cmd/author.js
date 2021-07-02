@@ -59,7 +59,7 @@ cmdHandler = (msgInfo) => {
     }
 
     // Captured fields in the result of match start at index 1
-    let fields = fields.slice(1, fields.length);
+    let fields = fields.slice(1);
     let author = new Author(...fields);
 
     // Call appropriate class function dynamically - e.g. picAdd

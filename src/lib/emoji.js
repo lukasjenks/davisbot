@@ -31,11 +31,11 @@ let multiply = (msgInfo, regex, client) => {
 
     let cmdInfo = null;
     if (cmdInfo = msgInfo.content.match(regex.leftEmoji)) {
-        let emoji = cmdInfo[1];
-        let n = parseInt(cmdInfo[3]);
+        var emoji = cmdInfo[1];
+        var n = parseInt(cmdInfo[3]);
     } else if (cmdInfo = msgInfo.content.match(regex.rightEmoji)){
-        let emoji = cmdInfo[3];
-        let n = parseInt(cmdInfo[1]);
+        var emoji = cmdInfo[3];
+        var n = parseInt(cmdInfo[1]);
     }
 
     if (containsEmoji(emoji, regex) || isServerEmoji(emoji, regex, client)) {

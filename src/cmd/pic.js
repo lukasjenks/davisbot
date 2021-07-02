@@ -98,7 +98,7 @@ cmdHandler = (msgInfo) => {
         }
         
         // Not included constructor args will default to null
-        fields = fields.slice(1, fields.length);
+        fields = fields.slice(1);
         let pic = new Pic(...fields); // slice as first element and last 2 elements are not extracted fields
 
 

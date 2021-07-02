@@ -34,7 +34,8 @@ client.on('message', (msg) => {
     if (!msg.author.bot) {
         // Command mode
         if (msg.content.charAt(0) === '!') {
-            let msgInfo = utils.getMsgInfo(msg, regex);
+            let nameOfCmd = msgInfo.msgArr[0].slice(1);
+            let msgInfo = utils.getMsgInfo(msg, regex[nameOfCmd]);
 
             let nameOfCmd = msgInfo.msgArr[0].slice(1);
             // Call dynamically built func call; e.g. author.cmdHandler(msg); -> located in src/author.js
@@ -47,8 +48,6 @@ client.on('message', (msg) => {
         } else if (msg.content.test(regex.emojiCmd)) {
             let msgInfo = utils.getMsgInfo(msg, regex, client);
             emoji.multiply(msgInfo);
-        } else {
-
         }
     }
 });
