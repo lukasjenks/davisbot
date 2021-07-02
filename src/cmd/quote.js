@@ -32,8 +32,6 @@ class Quote {
         if (this.author === "random") {
             this.quoteRandom(channel);
         } else {
-            console.log("in else statement");
-            console.log(this.author);
             db.get(`select content from quote where author_id = (select id from author where command = ?) order by RANDOM()`, [this.author], (err, quoteRec) => {
                 if (err) {
                     channel.send("An error occured. Usage: !quote [author]. Error: " + err.Error);
@@ -132,8 +130,7 @@ class Quote {
     }
 }
 
-let fnWrapper = [];
-fnWrapper['cmdHandler'] = (msgInfo) => {
+const cmdHandler = (msgInfo) => {
     if (msgInfo.msgArr.length >= 3) {
         let fields = null;
         // Identify and respond to subcommands
@@ -175,4 +172,4 @@ fnWrapper['cmdHandler'] = (msgInfo) => {
     }
 }
 
-module.exports = cmdHandler;
+module.exports = { cmdHandler };

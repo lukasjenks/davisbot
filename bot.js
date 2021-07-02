@@ -15,7 +15,7 @@ const emoji = require('./src/lib/emoji');
 const cmdModules = {quote,author,pic,update,help,ascii};
 
 const utils = require('./src/lib/utils');
-const regex = require('./lib/regex'); // precompiled regex are faster than inline
+const regex = require('./src/lib/regex'); // precompiled regex are faster than inline
 
 const client = new Discord.Client();
 
@@ -34,19 +34,18 @@ client.on('message', (msg) => {
     if (!msg.author.bot) {
         // Command mode
         if (msg.content.charAt(0) === '!') {
-            let nameOfCmd = msgInfo.msgArr[0].slice(1);
-            let msgInfo = utils.getMsgInfo(msg, regex[nameOfCmd]);
+            let nameOfCmd = msg.content.split(" ")[0].trim().slice(1); // extract nameOfCmd from ![nameOfCmd] [arg]
+            let msgInfo = nameOfCmd.length > 1 ? utils.getMsgInfo(msg, regex[nameOfCmd]) : null;
 
-            let nameOfCmd = msgInfo.msgArr[0].slice(1);
             // Call dynamically built func call; e.g. author.cmdHandler(msg); -> located in src/author.js
-            if (cmdModules[nameOfCmd] && cmdModules[nameOfCmd]['fnWrapper'] && cmdModules[nameOfCmd]['fnWrapper']['cmdHandler']) {
-                cmdModules[nameOfCmd]['fnWrapper']['cmdHandler'](msgInfo, regex);
+            if (cmdModules[nameOfCmd] && cmdModules[nameOfCmd]['cmdHandler']) {
+                cmdModules[nameOfCmd]['cmdHandler'](msgInfo);
             } else {
                 msg.channel.send("Command not recognized. For a list of valid commands, use !help");
             }
         // Emoji command mode: emoji command format: emoji * n || n * emoji
-        } else if (msg.content.test(regex.emojiCmd)) {
-            let msgInfo = utils.getMsgInfo(msg, regex, client);
+        } else if (regex.emoji.emojiCmd.test(msg.content)) {
+            let msgInfo = utils.getMsgInfo(msg, regex['emoji'], client);
             emoji.multiply(msgInfo);
         }
     }

@@ -54,7 +54,7 @@ class Update {
 
 // Wrap cmdHandler function in this way such that it can be called by building a dynamically generated
 // string of the function name in bot.js
-cmdHandler = (msgInfo) => {
+const cmdHandler = (msgInfo) => {
     // Extract resource name and url/full name from the following command types:
     // !update author [name|pic] [resource name] [url|full name]
     // !update pic [name|url] [resource name] [url]
@@ -76,4 +76,4 @@ cmdHandler = (msgInfo) => {
     }
 }
 
-module.exports = cmdHandler;
+module.exports = { cmdHandler };

@@ -1,6 +1,6 @@
 const figlet = require('figlet');
 
-cmdHandler = (msgInfo) => {
+const cmdHandler = (msgInfo) => {
     if (msgInfo.msgArr.length > 1) {
         msgInfo.msgArr.splice(0, 1);
         let messageString = msgInfo.msgArr.join(" ");
@@ -24,4 +24,4 @@ cmdHandler = (msgInfo) => {
     }
 }
 
-module.exports = cmdHandler;
+module.exports = { cmdHandler };

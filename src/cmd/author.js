@@ -38,7 +38,7 @@ class Author {
 
 // Wrap cmdHandler function in this way such that it can be called by building a dynamically generated
 // string of the function name in bot.js
-cmdHandler = (msgInfo) => {
+const cmdHandler = (msgInfo) => {
     // Extract with regex
     // !author list
     // !author add [name] [url] [full name]
@@ -59,11 +59,11 @@ cmdHandler = (msgInfo) => {
     }
 
     // Captured fields in the result of match start at index 1
-    let fields = fields.slice(1);
+    fields = fields.slice(1);
     let author = new Author(...fields);
 
     // Call appropriate class function dynamically - e.g. picAdd
     author["author" + utils.titleCase(fields[0])](msgInfo.channel);
 }
 
-module.exports = cmdHandler;
+module.exports = { cmdHandler };

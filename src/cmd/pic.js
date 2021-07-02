@@ -71,7 +71,7 @@ class Pic {
     }
 }
 
-cmdHandler = (msgInfo) => {
+const cmdHandler = (msgInfo) => {
     if (msgInfo.msgArr.length >= 2) {
         let fields = null;
         switch (msgInfo.msgArr[1]) {
@@ -110,4 +110,4 @@ cmdHandler = (msgInfo) => {
     }
 }
 
-module.exports = cmdHandler;
+module.exports = { cmdHandler };
