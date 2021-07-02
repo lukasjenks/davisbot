@@ -1,12 +1,11 @@
 const figlet = require('figlet');
 
-let fnWrapper = [];
-fnWrapper['cmdHandler'] = (msgInfo) => {
+cmdHandler = (msgInfo) => {
     if (msgInfo.msgArr.length > 1) {
         msgInfo.msgArr.splice(0, 1);
         let messageString = msgInfo.msgArr.join(" ");
 
-        if (/^[0-9a-zA-Z=!\?\s]+$/.test(messageString)) {
+        if (msgInfo.regex.validFiglet.test(messageString)) {
             figlet(messageString, (err, data) => {
                 if (err) {
                     msgInfo.channel.send("An error occured converting your string to ascii.")
@@ -25,4 +24,4 @@ fnWrapper['cmdHandler'] = (msgInfo) => {
     }
 }
 
-module.exports = { fnWrapper };
+module.exports = cmdHandler;

@@ -71,22 +71,21 @@ class Pic {
     }
 }
 
-let fnWrapper = [];
-fnWrapper["cmdHandler"] = (msgInfo) => {
+cmdHandler = (msgInfo) => {
     if (msgInfo.msgArr.length >= 2) {
         let fields = null;
         switch (msgInfo.msgArr[1]) {
             case "add": //4 args
-                fields = msgInfo.content.match(/^\s*\!pic\s+(add)\s+([^\s]+)\s+([^\s])\s*$/);
+                fields = msgInfo.content.match(msgInfo.regex.picAddCmd);
                 break;
             case "like": //3 args
-                fields = msgInfo.content.match(/^\s*\!pic\s+(like)\s+([^\s+])\s*$/);
+                fields = msgInfo.content.match(msgInfo.regex.picLikeCmd);
                 break;
             case "list": //2 args
-                fields = msgInfo.content.match(/^\s*\!pic\s+(list)\s*$/);
+                fields = msgInfo.content.match(msgInfo.regex.picListCmd);
                 break;
             case "show": //3 args
-                fields = msgInfo.content.match(/^\s*\!pic\s+(show)\s+([^\s]+)\s*$/);
+                fields = msgInfo.content.match(msgInfo.regex.picShowCmd);
                 break;
             default:
                 utils.invalidUsage("!pic", msgInfo.channel);
@@ -111,4 +110,4 @@ fnWrapper["cmdHandler"] = (msgInfo) => {
     }
 }
 
-module.exports = { fnWrapper };
+module.exports = cmdHandler;

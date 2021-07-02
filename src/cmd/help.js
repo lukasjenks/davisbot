@@ -1,9 +1,8 @@
 const Discord = require('discord.js');
 const utils = require('../lib/utils');
 
-let fnWrapper = [];
-fnWrapper['cmdHandler'] = (msgInfo) => {
+cmdHandler = (msgInfo) => {
     utils.usageMessage(msgInfo);
 }
 
-module.exports = fnWrapper;
+module.exports = cmdHandler;

@@ -38,37 +38,32 @@ class Author {
 
 // Wrap cmdHandler function in this way such that it can be called by building a dynamically generated
 // string of the function name in bot.js
-let fnWrapper = [];
-fnWrapper['cmdHandler'] = (msgInfo) => {
+cmdHandler = (msgInfo) => {
     // Extract with regex
     // !author list
     // !author add [name] [url] [full name]
     let fields = null;
-    let author = null;
     switch (msgInfo.msgArr[1]) {
         case "add":
-            fields = msgInfo.content.match(/^\s*\!author\s+(add)\s+([^\s]+)\s+([^\s]+)\s+(.+)\s*$/);
-            if (fields === null) {
-                utils.invalidUsage("!author", msgInfo.channel);
-            }
-            author = new Author(fields[1], fields[2], fields[3], fields[4]);
-            break;
+            fields = msgInfo.content.match(msgInfo.regex.authorAddCmd);
         case "list":
-            fields = msgInfo.content.match(/^\s*\!author\s+(list)\s*$/);
-            if (fields === null) {
-                utils.invalidUsage("!author", msgInfo.channel);
-            }
-            author = new Author(fields[1]);
+            fields = msgInfo.content.match(msgInfo.regex.authorListCmd);
             break;
         default:
             break;
     }
-    if (fields !== null) {
-        // Call appropriate class function dynamically - e.g. quoteAdd
-        author["author" + utils.titleCase(fields[1])](msgInfo.channel);
-    } else {
+    
+    if (fields === null) {
         utils.invalidUsage("!author", msgInfo.channel);
+        return;
     }
+
+    // Captured fields in the result of match start at index 1
+    let fields = fields.slice(1, fields.length);
+    let author = new Author(...fields);
+
+    // Call appropriate class function dynamically - e.g. picAdd
+    author["author" + utils.titleCase(fields[0])](msgInfo.channel);
 }
 
-module.exports = { fnWrapper };
+module.exports = cmdHandler;

@@ -3,7 +3,7 @@ const auth = require('./auth.json');
 const token = auth.token;
 const MIN_INTERVAL = 2 * 60 * 1000;
 
-// Import helper function modules
+// Import cmd handlers
 const quote = require('./src/cmd/quote');
 const author = require('./src/cmd/author');
 const pic = require('./src/cmd/pic');
@@ -15,6 +15,7 @@ const emoji = require('./src/lib/emoji');
 const cmdModules = {quote,author,pic,update,help,ascii};
 
 const utils = require('./src/lib/utils');
+const regex = require('./lib/regex'); // precompiled regex are faster than inline
 
 const client = new Discord.Client();
 
@@ -31,27 +32,23 @@ client.on('ready', () => {
 // Handle comands
 client.on('message', (msg) => {
     if (!msg.author.bot) {
-        // Command Mode
+        // Command mode
         if (msg.content.charAt(0) === '!') {
-            // Split on whitespace for parsing of command
-            let msgInfo = utils.getMsgInfo(msg);
+            let msgInfo = utils.getMsgInfo(msg, regex);
 
             let nameOfCmd = msgInfo.msgArr[0].slice(1);
             // Call dynamically built func call; e.g. author.cmdHandler(msg); -> located in src/author.js
             if (cmdModules[nameOfCmd] && cmdModules[nameOfCmd]['fnWrapper'] && cmdModules[nameOfCmd]['fnWrapper']['cmdHandler']) {
-                cmdModules[nameOfCmd]['fnWrapper']['cmdHandler'](msgInfo);
+                cmdModules[nameOfCmd]['fnWrapper']['cmdHandler'](msgInfo, regex);
             } else {
                 msg.channel.send("Command not recognized. For a list of valid commands, use !help");
             }
-
+        // Emoji command mode: emoji command format: emoji * n || n * emoji
+        } else if (msg.content.test(regex.emojiCmd)) {
+            let msgInfo = utils.getMsgInfo(msg, regex, client);
+            emoji.multiply(msgInfo);
         } else {
-            // split message content on whitespace to isolate into individual char groups
-            // var messageArr = msg.content.split(/(\s+)/).filter( function(e) { return e.trim().length > 0; } );
-            if (msg.content.match(/^[^\s]+\s*\*\s*[0-9]+$/)) {
-                let msgInfo = utils.getMsgInfo(msg);
-                emoji.multiply(msgInfo, client);
-                // TODO: add chat.replyToUser() functionality here
-            }
+
         }
     }
 });

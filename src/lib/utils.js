@@ -53,8 +53,8 @@ module.exports = {
         return stringArr.join('');
     },
 
-    getMsgInfo: function (msg) {
+    getMsgInfo: function (msg, regex=null, client=null) {
         let msgArr = msg.content.split(/(\s+)/).filter( function(e) { return e.trim().length > 0; } );
-        return {content: msg.content, channel: msg.channel, msgArr: msgArr};
+        return {content: msg.content, channel: msg.channel, msgArr: msgArr, regex: regex, client: client};
     }
 }

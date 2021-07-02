@@ -1,13 +1,9 @@
-const utils = require("./utils");
-const regex = require("../cfg/regex.json");
-
-let containsEmoji = (emoji) => {
-    let emojiPattern = Buffer.from(regex.genericEmojiBase64, "base64").toString();
-    return new RegExp(emojiPattern).test(emoji);
+let containsEmoji = (emoji, regex) => {
+    return regex.emojiPattern.test(emoji);
 };
 
-let isServerEmoji = (emoji, client) => {
-    let emojiFields = emoji.match(/^<:.+:([0-9]+)>$/);
+let isServerEmoji = (emoji, regex, client) => {
+    let emojiFields = emoji.match(regex.discordEmoji);
     let emojiNum = emojiFields ? emojiFields[1] : null;
     if (emojiNum && client.emojis.find(value => value.id == emojiNum)) {
       return true;
@@ -30,17 +26,20 @@ let sendEmojiNTimes = (emoji, n, channel) => {
     }
 };
 
-let multiply = (msgInfo, client) => {
-    // Check if it msg matches [emoji] * [num] or [num] * [emoji]
-    let params = (msgInfo.content.match(/^\s*([^\s]+)\s*\*\s*([0-9]+)\s*$/) || 
-                  msgInfo.content.match(/^\s*([0-9]+)\s*\*\s*([^\s]+)\s*$/));
-    if (params !== null) {
-        let emoji = params[1];
-        let n = parseInt(params[2]);
+let multiply = (msgInfo, regex, client) => {
+    // Check if msg content matches [emoji] * [num] or [num] * [emoji]
 
-        if (containsEmoji(emoji) || isServerEmoji(emoji, client)) {
-          sendEmojiNTimes(emoji, n, msgInfo.channel);
-        }
+    let cmdInfo = null;
+    if (cmdInfo = msgInfo.content.match(regex.leftEmoji)) {
+        let emoji = cmdInfo[1];
+        let n = parseInt(cmdInfo[3]);
+    } else if (cmdInfo = msgInfo.content.match(regex.rightEmoji)){
+        let emoji = cmdInfo[3];
+        let n = parseInt(cmdInfo[1]);
+    }
+
+    if (containsEmoji(emoji, regex) || isServerEmoji(emoji, regex, client)) {
+        sendEmojiNTimes(emoji, n, msgInfo.channel);
     }
 };
 

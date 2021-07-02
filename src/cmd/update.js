@@ -77,4 +77,4 @@ fnWrapper['cmdHandler'] = (msgInfo) => {
     }
 }
 
-module.exports = { fnWrapper };
+module.exports = cmdHandler;
