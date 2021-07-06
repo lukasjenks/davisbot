@@ -2,13 +2,11 @@ const largeRegex = require('../cfg/large-regex.json');
 
 module.exports = 
 {
-    // Done
     author: {
         authorAddCmd: new RegExp(/^\s*!author\s+(add)\s+([^\s]+)\s+([^\s]+)\s+([^\s]{1}.+[^\s]{1})$/),
         authorListCmd: new RegExp(/^\s*!author\s+(list)\s*$/)
     },
 
-	// Done
     pic: {
         picAddCmd : new RegExp(/^\s*!pic\s+(add)\s+([^\s]+)\s+([^\s]+)\s*$/),
         picLikeCmd: new RegExp(/^\s*!pic\s+(like)\s+([^\s]+)\s*$/),
@@ -16,7 +14,6 @@ module.exports =
         picShowCmd: new RegExp(/^\s*!pic\s+(show)\s+([^\s]+)\s*$/)
     },
 
-    // Done
     quote: {
         quoteAddCmd: new RegExp(/^\s*!quote\s+(add)\s+([^\s]+)\s+([^\s]+)\s+([^\s]{1}.+[^\s]{1})$/),
         quoteAuthorCmd: new RegExp(/^\s*!quote\s+(author)\s+([^\s]+)\s*$/),
@@ -31,7 +28,6 @@ module.exports =
         updateAuthorPicCmd: new RegExp(/^\s*!update\s+(author)\s+(pic)\s+([^\s]+)\s+([^\s]+)\s*$/)
     },
 
-    // Done
     emoji: {
         emojiCmd: new RegExp(/(?:^\s*[^\s]+\s*\*\s*[0-9]+\s*$)|(?:^\s*[0-9]+\s*\*\s*[^\s]+\s*$)/),
         leftEmojiCmd: new RegExp(/^\s*([^\s]+)\s*\*\s*([0-9]+)\s*$/),
@@ -40,7 +36,10 @@ module.exports =
         discordEmoji: new RegExp(/^<:.+:([0-9]+)>$/)
     },
 
-    // Done
+    define: {
+        defineCmd: new RegExp(/^\s*!define\s+([^\s]{1}.+[^\s]{1})$/)
+    },
+
     ascii: {
         validFiglet: new RegExp(/^[0-9a-zA-Z=!\?\s]+$/)
     }

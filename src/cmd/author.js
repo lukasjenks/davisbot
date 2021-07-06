@@ -8,6 +8,7 @@ class Author {
         this.subCmd = subCmd;
         this.name = name ? name.toLowerCase() : null;
         this.fullName = fullName;
+        this.url = url;
     }
 
     authorAdd(channel) {

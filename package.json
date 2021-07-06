@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.21.1",
     "discord": "^0.8.2",
     "discord.js": "^11.5.1",
     "figlet": "^1.5.0",

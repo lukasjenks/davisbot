@@ -13,11 +13,11 @@ class Quote {
     quoteAdd(channel) {
         db.get('select id from author where command = ?', [this.author], (err, authorRec) => {
             if (err) {
-                channel.send("An error occured. Usage: !quoteadd [author] [topic] \"[quote]\". Error: " + err.Error);
+                channel.send("An error occured. Usage: !quoteadd [author] [topic] [quote]. Error: " + err.Error);
             } else if (authorRec !== undefined) {
                 db.run('insert into quote (author_id, topic, content) values (?, ?, ?)', [authorRec.id, this.topic, this.quote], (err) => {
                     if (err) {
-                        channel.send("An error occured. Usage: !quoteadd [author] [topic] \"[quote]\". Error: " + err.Error);
+                        channel.send("An error occured. Usage: !quoteadd [author] [topic] [quote]. Error: " + err.Error);
                     } else {
                         channel.send("Successfully added quote to DB.");
                     }
@@ -83,11 +83,11 @@ class Quote {
     quoteLike(channel) {
         db.get('select author_id, content from quote where content like ? order by random() limit 1', '%' + this.quote + '%', (err, quoteRec) => {
             if (err) {
-                channel.send("An error occured. Usage: !quote like \"quote substring here\". Error: " + err.Error);
+                channel.send("An error occured. Usage: !quote like quote substring here. Error: " + err.Error);
             } else if (quoteRec !== undefined) {
                 db.get('select full_name, picture_url from author where id = ?', quoteRec.author_id, (err, authorRec) => {
                     if (err) {
-                        msg.channel.send("An error occured. Usage: !quote like \"quote substring here\". Error: " + err.Error);
+                        msg.channel.send("An error occured. Usage: !quote like quote substring here. Error: " + err.Error);
                     } else if (authorRec !== undefined) {
                         const embed = new Discord.RichEmbed()
                             .setDescription(quoteRec.content)
