@@ -41,7 +41,7 @@ const multiply = (msgInfo) => {
     }
 
 
-    if (emoji.containsEmoji(msgInfo.regex.genericEmoji) || isServerEmoji(msgInfo.regex.discordEmoji)) {
+    if (emoji.containsEmoji(msgInfo.regex.genericEmoji) || emoji.isServerEmoji(msgInfo.regex.discordEmoji, msgInfo.client)) {
         emoji.sendEmojiNTimes(msgInfo.channel);
     }
 };
