@@ -1,5 +1,5 @@
 *~
 auth.json
 node_modules
-bot.db
+db/bot.db
 .vscode

@@ -39,7 +39,7 @@ const cmdHandler = (msgInfo) => {
         return;
     }
 
-	let defNum = fields[1] !== undefined ? fields[1] : 1;
+	let defNum = fields[1] !== undefined ? fields[1] -1 : 0;
 	let term = fields[2];
 
     defineTerm(defNum, term, msgInfo.channel);
