@@ -3,9 +3,6 @@ const utils = require('../lib/utils');
 const axios = require("axios").default;
 
 const defineTerm = (defNum, term, channel) => {
-
-	console.log(defNum);
-	console.log(term);
 	
     let options = {
         method: 'GET',
@@ -15,7 +12,6 @@ const defineTerm = (defNum, term, channel) => {
     axios.get("https://api.urbandictionary.com/v0/define", options).then(response => {
 		// Get given definition number and strip it of [] chars that go around links to other definitions
 		let definition = response.data.list[defNum].definition.replace(/\[|\]/g, "");
-		console.log(definition);
 		if (definition.length < 4000) {
 			channel.send(definition);
 		} else {
