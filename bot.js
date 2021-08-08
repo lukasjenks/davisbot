@@ -37,7 +37,6 @@ client.on('message', (msg) => {
         if (msg.content.charAt(0) === '!') {
             let nameOfCmd = msg.content.split(" ")[0].trim().slice(1); // extract nameOfCmd from ![nameOfCmd] [arg]
             let msgInfo = nameOfCmd.length > 1 ? utils.getMsgInfo(msg, regex[nameOfCmd]) : null;
-
             // Call dynamically built func call; e.g. author.cmdHandler(msg); -> located in src/author.js
             if (cmdModules[nameOfCmd] && cmdModules[nameOfCmd]['cmdHandler']) {
                 cmdModules[nameOfCmd]['cmdHandler'](msgInfo);

@@ -37,7 +37,7 @@ module.exports =
     },
 
     define: {
-        defineCmd: new RegExp(/^\s*!define\s+([^\s]{1}.+[^\s]{1})$/)
+        defineCmd: new RegExp(/^\!define\s+(?:(?:([0-9]*)\s+)|.{0})([^\s]{1}.*[^\s]{1})$/)
     },
 
     ascii: {

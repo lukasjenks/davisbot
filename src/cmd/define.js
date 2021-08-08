@@ -2,21 +2,28 @@ const Discord = require('discord.js');
 const utils = require('../lib/utils');
 const axios = require("axios").default;
 
-const defineTerm = (term, channel) => {
+const defineTerm = (defNum, term, channel) => {
 
+	console.log(defNum);
+	console.log(term);
+	
     let options = {
         method: 'GET',
         params: {term: term}
     };
     
     axios.get("https://api.urbandictionary.com/v0/define", options).then(response => {
-        channel.send(response.data.list[0].definition.replace(/\[|\]/g, ""));
+		// Get given definition number and strip it of [] chars that go around links to other definitions
+		let definition = response.data.list[defNum].definition.replace(/\[|\]/g, "");
+		console.log(definition);
+		if (definition.length < 4000) {
+			channel.send(definition);
+		} else {
+			channel.send("Definition for term is too long to be retrieved. Try retrieving the next most popular definition for your term.");
+		}
     }).catch(error => {
-        if (error === "TypeError: Cannot read property 'definition' of undefined") {
-            channel.send("No definitions found.");
-        } else {
-            channel.send("An error occured retrieving the definition: " + error);
-        }
+		console.error(error);
+		channel.send("No definitions for given term were found.");
     });
 }
 
@@ -32,7 +39,10 @@ const cmdHandler = (msgInfo) => {
         return;
     }
 
-    defineTerm(fields[1], msgInfo.channel);
+	let defNum = fields[1] !== undefined ? fields[1] : 1;
+	let term = fields[2];
+
+    defineTerm(defNum, term, msgInfo.channel);
 }
 
 module.exports = { cmdHandler };
