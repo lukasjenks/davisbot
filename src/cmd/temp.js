@@ -23,14 +23,14 @@ const outputTemp = (date, channel) => {
 		if (response.data.current.sunrise < now < response.data.current.sunset) {
 			let entry = response.data.current;
 			const embed = new Discord.RichEmbed()
-				.setTitle("Forecast")
+				.setTitle("Forecast for " + new Date().toDateString())
 				.setAuthor("OpenWeatherMap", "https://upload.wikimedia.org/wikipedia/commons/f/f6/OpenWeather-Logo.jpg")
 				.setColor('#00c0f5')
 				.addField("Temperature", entry.temp)
 				.addField("Feels Like", entry.feels_like)
 				.addField("Humidity", entry.humidity)
 				.addField("Wind Speed", entry.wind_speed)
-				.addField("Description", entry.weather.main + "(" + entry.weather.description + ")")
+				.addField("Description", entry.weather[0].main + " (" + entry.weather[0].description + ")")
 			channel.send(embed);
 		} else {
 			// Handle tomorrow and all other days here
@@ -102,7 +102,7 @@ const cmdHandler = (msgInfo) => {
     }
 
 	let date = getDateFromCmdFields(fields);
-	outputTemp(date, msgInfo.client);
+	outputTemp(date, msgInfo.channel);
 }
 
 module.exports = { cmdHandler };

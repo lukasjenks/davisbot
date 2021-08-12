@@ -12,8 +12,9 @@ const help = require('./src/cmd/help');
 const ascii = require('./src/cmd/ascii');
 const emoji = require('./src/lib/emoji');
 const define = require('./src/cmd/define');
+const temp = require('./src/cmd/temp');
 
-const cmdModules = {quote,author,pic,update,help,ascii,define};
+const cmdModules = {quote,author,pic,update,help,ascii,define,temp};
 
 const utils = require('./src/lib/utils');
 const regex = require('./src/lib/regex'); // precompiled regex are faster than inline
