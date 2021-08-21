@@ -38,9 +38,9 @@ module.exports =
         quoteLikeCmd: new RegExp(/^\s*!quote\s+(like)\s+([^\s]{1}.+[^\s]{1})$/)
     },
 
-	temp: {
-		// !temp ([none]|now|tomorrow|next) ([none]|[day of week])
-		tempCmd: new RegExp(/^\s*!temp(?:\s+|.{0})((?:now)|(?:tomorrow)|(?:next).{0})((?:monday)|(?:tuesday)|(?:wednesday)|(?:thursday)|(?:friday)|(?:saturday)|(?:sunday)|.{0})\s*$/)
+	weather: {
+		// !weather ([none]|now|tomorrow|next) ([none]|[day of week])
+		weatherCmd: new RegExp(/^\s*!weather(?:\s+|.{0})(now|tomorrow|next|.{0})(?:\s+|.{0})(monday|tuesday|wednesday|thursday|friday|saturday|sunday|.{0})\s*$/)
 	},
 
     update: {

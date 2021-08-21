@@ -12,9 +12,9 @@ const help = require('./src/cmd/help');
 const ascii = require('./src/cmd/ascii');
 const emoji = require('./src/lib/emoji');
 const define = require('./src/cmd/define');
-const temp = require('./src/cmd/temp');
+const weather = require('./src/cmd/weather');
 
-const cmdModules = {quote,author,pic,update,help,ascii,define,temp};
+const cmdModules = {quote,author,pic,update,help,ascii,define,weather};
 
 const utils = require('./src/lib/utils');
 const regex = require('./src/lib/regex'); // precompiled regex are faster than inline
@@ -37,7 +37,7 @@ client.on('message', (msg) => {
         // Command mode
         if (msg.content.charAt(0) === '!') {
             let nameOfCmd = msg.content.split(" ")[0].trim().slice(1); // extract nameOfCmd from ![nameOfCmd] [arg]
-            let msgInfo = nameOfCmd.length > 1 ? utils.getMsgInfo(msg, regex[nameOfCmd]) : null;
+            let msgInfo = nameOfCmd.length > 1 ? utils.getMsgInfo(msg, regex[nameOfCmd], client) : null;
             // Call dynamically built func call; e.g. author.cmdHandler(msg); -> located in src/author.js
             if (cmdModules[nameOfCmd] && cmdModules[nameOfCmd]['cmdHandler']) {
                 cmdModules[nameOfCmd]['cmdHandler'](msgInfo);
