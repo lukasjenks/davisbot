@@ -40,7 +40,7 @@ module.exports =
 
 	temp: {
 		// !temp ([none]|now|tomorrow|next) ([none]|[day of week])
-		tempCmd: new RegExp(/^\s*!temp(?:\s+|.{0})((?:now)|(?:tomorrow)|(?:next).{0})((?:monday)|(?:tuesday)|(?:wednesday)|(?:thursday)|(?:friday)|(?:saturday)|(?:sunday)|.{0})\s*$/)
+		tempCmd: new RegExp(/^\s*!temp(?:\s*)(now|tomorrow|monday|tuesday|wednesday|thursday|friday|saturday|sunday)\s*/)
 	},
 
     update: {
