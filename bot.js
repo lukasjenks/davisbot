@@ -64,7 +64,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
 
     if (user.bot || !reaction.message.guild) return;
 
-    if (reaction.message.content.includes("React with:")) {
+    if (reaction.message.content.includes("React with")) {
         if (reaction._emoji && reaction._emoji.name === "hello_there") {
             var role = reaction.message.member.guild.roles.cache.find(role => role.name === "kenobi");
             let member = reaction.message.member.guild.members.cache.get(user.id);
