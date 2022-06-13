@@ -32,13 +32,11 @@ client.login(token)
 // Upon bot connection
 client.on('ready', () => {
 	console.log("Connected to Discord.");
-    //client.channels.find("name","general").send("```Welcome! React with:\n:hello_there: to get access to the #kenobi spoiler channel.```");
-    //let channel = client.channels.find("name", "general")
-    //channel.messages.cache.fetch(985681636047859742, true, true);
+    //client.channels.find("name","welcome").send("React with :hello_there: to get access to the #kenobi spoiler channel.");
 });
 
 // Handle comands
-client.on('message', (msg) => {
+client.on('messageCreate', (msg) => {
     if (!msg.author.bot) {
         // Command mode
         if (msg.content.charAt(0) === '!') {
@@ -68,7 +66,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
 
     if (reaction.message.content.includes("React with:")) {
         if (reaction._emoji && reaction._emoji.name === "hello_there") {
-            var role = reaction.message.member.guild.roles.cache.find(role => role.name === "weenies");
+            var role = reaction.message.member.guild.roles.cache.find(role => role.name === "kenobi");
             let member = reaction.message.member.guild.members.cache.get(user.id);
             member.roles.add(role);
         }
