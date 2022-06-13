@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 
 module.exports = {
     usageMessage: function (channel) {
-        const embed = new Discord.RichEmbed()
+        const embed = new Discord.MessageEmbed()
             .setTitle("Available Commands")
             .addField("Help", "!help => get this usage message.", true)
             .addField("Quoting", "!quote author [name] => quote a given person with entries in the DB. (author can be replaced with 'random')\n\n!quote add [name] [topic] [quote] => add a quote attributed to a given person.\n\n!author add [name] [picture_url] [full_name] => add a new author of quotes\n\n!author list => names all authors that exist in the DB.", true)
@@ -11,7 +11,7 @@ module.exports = {
 			.addField("Emoji Multiplier", "[emoji] * [number] => print out the given emoji [number] times.", true)
             .addField("Updates", "!update author [pic|name] [resource name] [url|full name]\n\n!update pic [name|url] [resource name] [name|url]", true)
             .setColor('#f50057');
-        channel.send(embed);
+        channel.send({ embeds: [embed] });
     },
 
     invalidUsage: function (cmd, channel) {

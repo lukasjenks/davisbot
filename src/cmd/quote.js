@@ -40,11 +40,11 @@ class Quote {
                         if (err) {
                             channel.send("An error occured. Usage: !quote [author]. Error: " + err.Error);
                         } else if (authorRec !== undefined) {
-                            const embed = new Discord.RichEmbed()
+                            const embed = new Discord.MessageEmbed()
                                 .setDescription(quoteRec.content)
                                 .setAuthor(authorRec.full_name, authorRec.picture_url)
                                 .setColor('#f50057');
-                            channel.send(embed);
+                            channel.send({ embeds: [embed] });
                         } else {
                             channel.send("Author not found in the DB.");
                         }
@@ -65,11 +65,11 @@ class Quote {
                     if (err) {
                         channel.send("An error occured. Usage: !quote about [topic]. Error: " + err.Error);
                     } else if (authorRec !== undefined) {
-                        const embed = new Discord.RichEmbed()
+                        const embed = new Discord.MessageEmbed()
                             .setDescription(quoteRec.content)
                             .setAuthor(authorRec.full_name, authorRec.picture_url)
                             .setColor('#f50057');
-                        channel.send(embed);
+                        channel.send({ embeds: [embed] });
                     } else {
                         channel.send("An unexpected error has occured: the author of the quote retrieved was not found in the DB.");
                     }
@@ -89,11 +89,11 @@ class Quote {
                     if (err) {
                         msg.channel.send("An error occured. Usage: !quote like quote substring here. Error: " + err.Error);
                     } else if (authorRec !== undefined) {
-                        const embed = new Discord.RichEmbed()
+                        const embed = new Discord.MessageEmbed()
                             .setDescription(quoteRec.content)
                             .setAuthor(authorRec.full_name, authorRec.picture_url)
                             .setColor('#f50057');
-                        channel.send(embed);
+                        channel.send({ embeds: [embed] });
                     } else {
                         channel.send("An unexpected error occured; The author associated with the quote to be retrieved was not found in the DB.");
                     }
@@ -114,11 +114,11 @@ class Quote {
                     if (err) {
                         channel.send("An error occured. Usage: !quote author [name]. Error: " + err.Error);
                     } else if (authorRec !== undefined) {
-                        const embed = new Discord.RichEmbed()
+                        const embed = new Discord.MessageEmbed()
                             .setDescription(quoteRec.content)
                             .setAuthor(authorRec.full_name, authorRec.picture_url)
                             .setColor('#f50057');
-                        channel.send(embed);
+                        channel.send({ embeds: [embed] });
                     } else {
                         channel.send("An unexpected error has occured: the author of the quote retrieved was not found in the DB.");
                     }

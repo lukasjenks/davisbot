@@ -13,13 +13,13 @@ const defineTerm = (defNum, term, channel) => {
 		// Get given definition number and strip it of [] chars that go around links to other definitions
 		let definition = response.data.list[defNum].definition.replace(/\[|\]/g, "");
 		if (definition.length < 4000) {
-			channel.send(definition);
+			channel.send("```" + definition + "```");
 		} else {
-			channel.send("Definition for term is too long to be retrieved. Try retrieving the next most popular definition for your term.");
+			channel.send("Definition for term is too long to be retrieved. Try retrieving the next most popular definition for your term (e.g. \"!define 2 linux\").");
 		}
     }).catch(error => {
 		console.error(error);
-		channel.send("No definitions for given term were found.");
+		channel.send("No definitions for the given term were found.");
     });
 }
 

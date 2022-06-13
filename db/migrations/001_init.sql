@@ -4,6 +4,6 @@ CREATE TABLE author (id integer primary key, command text, full_name text, pictu
 CREATE TABLE picture (id integer primary key, command text, url text);
 
 -- +goose Down
-DROP TABLE quote;
-DROP TABLE author;
-DROP TABLE picture;
+--DROP TABLE quote;
+--DROP TABLE author;
+--DROP TABLE picture;

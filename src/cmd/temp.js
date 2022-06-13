@@ -21,7 +21,7 @@ const outputTemp = (dayNum, channel) => {
 		// Current data is structured differently in response JSON so must be parsed differently
 		let entry = dayNum === 0 ? response.data.current : response.data.daily[dayNum];
 		if (dayNum === 0) {
-			const embed = new Discord.RichEmbed()
+			const embed = new Discord.MessageEmbed()
 				.setTitle("Current Conditions (" + new Date().toDateString() + ")")
 				.setAuthor("OpenWeatherMap", "https://upload.wikimedia.org/wikipedia/commons/f/f6/OpenWeather-Logo.jpg")
 				.setColor('#00c0f5')
@@ -30,9 +30,9 @@ const outputTemp = (dayNum, channel) => {
 				.addField("Chance of Precipitation", response.data.daily[0].pop*100 + "%")
 				.addField("Wind Speed", entry.wind_speed + "m/s")
 				.addField("Description", entry.weather[0].main + " (" + entry.weather[0].description + ")")
-			channel.send(embed);
+			channel.send({ embeds: [embed] });
 		} else {
-			const embed = new Discord.RichEmbed()
+			const embed = new Discord.MessageEmbed()
 				.setTitle("Forecast for: " + new Date(entry.dt * 1000).toDateString())
 				.setAuthor("OpenWeatherMap", "https://upload.wikimedia.org/wikipedia/commons/f/f6/OpenWeather-Logo.jpg")
 				.setColor('#00c0f5')
@@ -41,7 +41,7 @@ const outputTemp = (dayNum, channel) => {
 				.addField("Chance of Precipitation", entry.pop*100 + "%")
 				.addField("Wind Speed", entry.wind_speed + "m/s")
 				.addField("Description", entry.weather[0].main + " (" + entry.weather[0].description + ")")
-			channel.send(embed);
+			channel.send({ embeds: [embed] });
 		}
 	}).catch(error => {
 		console.log(error);
