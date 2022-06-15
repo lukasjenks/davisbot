@@ -32,7 +32,8 @@ client.login(token)
 // Upon bot connection
 client.on('ready', () => {
 	console.log("Connected to Discord.");
-    client.channels.find("name","welcome").send("React with :hello_there: to toggle access to the #kenobi channel on. Replace your reaction with :old_ben: to toggle access off.");
+    client.channels.cache.find(channel => channel.name === 'welcome').send("React with :hello_there: to toggle access to the #kenobi channel on. Replace your reaction with :old_ben: to toggle access off.");
+    //client.channels.find("name","welcome").send("React with :hello_there: to toggle access to the #kenobi channel on. Replace your reaction with :old_ben: to toggle access off.");
 });
 
 // Handle comands
