@@ -32,7 +32,7 @@ client.login(token)
 // Upon bot connection
 client.on('ready', () => {
 	console.log("Connected to Discord.");
-    //client.channels.find("name","welcome").send("React with :hello_there: to get access to the #kenobi spoiler channel.");
+    client.channels.find("name","welcome").send("React with :hello_there: to toggle access to the #kenobi channel on. Replace your reaction with :old_ben: to toggle access off.");
 });
 
 // Handle comands
@@ -58,6 +58,7 @@ client.on('messageCreate', (msg) => {
 
 // Adding reaction-role function
 client.on('messageReactionAdd', async (reaction, user) => {
+    // Fetch "partials" to get full context ( required now in 2023 with intents changes )
     if (reaction.message.partial) await reaction.message.fetch();
     if (reaction.partial) await reaction.fetch();
     if (user.partial) await user.fetch();
@@ -65,10 +66,12 @@ client.on('messageReactionAdd', async (reaction, user) => {
     if (user.bot || !reaction.message.guild) return;
 
     if (reaction.message.content.includes("React with")) {
+        let role = reaction.message.member.guild.roles.cache.find(role => role.name === "kenobi");
+        let member = reaction.message.member.guild.members.cache.get(user.id);
         if (reaction._emoji && reaction._emoji.name === "hello_there") {
-            var role = reaction.message.member.guild.roles.cache.find(role => role.name === "kenobi");
-            let member = reaction.message.member.guild.members.cache.get(user.id);
             member.roles.add(role);
+        } else if (reaction._emoji && reaction._emoji.name === "old_ben") {
+            member.roles.remove(role);
         }
     }
-  });
+});
