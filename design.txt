@@ -18,6 +18,7 @@ Project Structure:
     ├── cmd [contains js files for major commands]
     │   ├── ascii.js
     │   ├── author.js
+    │   ├── birthday.js
     │   ├── help.js
     │   ├── pic.js
     │   ├── quote.js
