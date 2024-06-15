@@ -1,4 +1,6 @@
 const { Client, Intents } = require("discord.js");
+const cron = require("node-cron");
+
 const auth = require("./auth.json");
 const token = auth.token;
 const MIN_INTERVAL = 2 * 60 * 1000;
@@ -30,6 +32,13 @@ const cmdModules = {
 const utils = require("./src/lib/utils");
 const regex = require("./src/lib/regex"); // precompiled regex are faster than inline
 
+// Schedule a task to run at 12:00 PM MST every day
+// Note: Cron uses UTC time, and MST is UTC-7
+cron.schedule("0 19 * * *", () => {
+    // Your task goes here
+    console.log("Running a task every day at 12:00 PM MST");
+});
+
 const client = new Client({
     intents: [
         Intents.FLAGS.GUILDS,
@@ -46,11 +55,11 @@ client.login(token).catch((err) => {
 // Upon bot connection
 client.on("ready", () => {
     console.log("Connected to Discord.");
-    client.channels.cache
-        .find((channel) => channel.name === "welcome")
-        .send(
-            "React with :hello_there: to toggle access to the #kenobi channel on. Replace your reaction with :old_ben: to toggle access off."
-        );
+    //client.channels.cache
+    //    .find((channel) => channel.name === "welcome")
+    //    .send(
+    //        "React with :hello_there: to toggle access to the #kenobi channel on. Replace your reaction with :old_ben: to toggle access off."
+    //    );
     //client.channels.find("name","welcome").send("React with :hello_there: to toggle access to the #kenobi channel on. Replace your reaction with :old_ben: to toggle access off.");
 });
 
