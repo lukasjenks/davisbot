@@ -1,5 +1,7 @@
 const { Client, Intents } = require("discord.js");
 const cron = require("node-cron");
+const schedule = require("node-schedule");
+const moment = require("moment-timezone");
 
 const auth = require("./auth.json");
 const token = auth.token;
@@ -32,13 +34,6 @@ const cmdModules = {
 const utils = require("./src/lib/utils");
 const regex = require("./src/lib/regex"); // precompiled regex are faster than inline
 
-// Schedule a task to run at 12:00 PM MST every day
-// Note: Cron uses UTC time, and MST is UTC-7
-cron.schedule("0 19 * * *", () => {
-    // Your task goes here
-    console.log("Running a task every day at 12:00 PM MST");
-});
-
 const client = new Client({
     intents: [
         Intents.FLAGS.GUILDS,
@@ -61,6 +56,17 @@ client.on("ready", () => {
     //        "React with :hello_there: to toggle access to the #kenobi channel on. Replace your reaction with :old_ben: to toggle access off."
     //    );
     //client.channels.find("name","welcome").send("React with :hello_there: to toggle access to the #kenobi channel on. Replace your reaction with :old_ben: to toggle access off.");
+});
+
+// Schedule a job to run at 9:00 AM Edmonton time every day
+schedule.scheduleJob({ hour: 16, minute: 56, tz: "Canada/Mountain" }, () => {
+    // Your task goes here
+    console.log("Running a task every day at 12:00 PM MST");
+    const generalChannel = client.channels.cache.find(
+        (channel) => channel.name === "general"
+    );
+    const birthdayInstance = new birthday.Birthday();
+    birthdayInstance.birthdayChecker(generalChannel);
 });
 
 // Handle comands

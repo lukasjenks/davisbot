@@ -14,7 +14,9 @@
     "discord": "^0.8.2",
     "discord.js": "^13.8.0",
     "figlet": "^1.5.2",
+    "moment-timezone": "^0.5.45",
     "node-cron": "^3.0.3",
+    "node-schedule": "^2.1.1",
     "sqlite3": "^5.0.8"
   }
 }

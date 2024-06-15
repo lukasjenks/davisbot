@@ -1,5 +1,6 @@
 const Discord = require("discord.js");
 const db = require("../lib/db");
+const moment = require("moment-timezone");
 const utils = require("../lib/utils");
 
 class Birthday {
@@ -10,7 +11,7 @@ class Birthday {
         this.birthday = birthday;
     }
 
-    dateStringToDisplayText(dateStr) {
+    getDateStringToDisplayText(dateStr) {
         let parts = dateStr.split("-");
 
         // Please note that months are 0-based in JavaScript
@@ -42,6 +43,11 @@ class Birthday {
         return humanReadableDate;
     }
 
+    getNameWithPossessiveArticle = (name) => {
+        const article = name.endsWith("s") ? `'` : `'s`;
+        return `${name}${article}`;
+    };
+
     birthdayAdd(channel) {
         db.run(
             "insert into birthday (user_tag, first_name, birthday) values (?, ?, ?)",
@@ -54,13 +60,10 @@ class Birthday {
                     );
                     console.log(err);
                 } else {
-                    const possessiveArticle = this.firstName.endsWith("s")
-                        ? `'`
-                        : `'s`;
                     channel.send(
-                        `Successfully added birthday to DB. #general will be notified about ${
+                        `Successfully added birthday to DB. #general will be notified about ${this.getNameWithPossessiveArticle(
                             this.firstName
-                        }${possessiveArticle} birthday on ${this.dateStringToDisplayText(
+                        )} birthday on ${this.getDateStringToDisplayText(
                             this.birthday
                         )}`
                     );
@@ -83,11 +86,44 @@ class Birthday {
                             message +
                             `${birthdayRec.user_tag} ${
                                 birthdayRec.first_name
-                            } ${this.dateStringToDisplayText(
+                            } ${this.getDateStringToDisplayText(
                                 birthdayRec.birthday
                             )}\n`;
                     });
                     channel.send(message);
+                }
+            }
+        );
+    }
+
+    birthdayChecker(channel) {
+        let todayInMST = moment().tz("Canada/Mountain").format("MM-DD");
+
+        db.all(
+            `SELECT user_tag, first_name, birthday FROM birthday WHERE strftime('%m-%d', birthday) = ?`,
+            [todayInMST],
+            (err, birthdayRecs) => {
+                if (err) {
+                    channel.send("An error occured. Error: " + err.Error);
+                } else {
+                    if (birthdayRecs.length > 0) {
+                        let message =
+                            "The bot picked up on one or more birthdays today:\n";
+                        birthdayRecs.forEach((birthdayRec) => {
+                            message =
+                                message +
+                                `${
+                                    birthdayRec.user_tag
+                                } It's ${this.getNameWithPossessiveArticle(
+                                    birthdayRec.first_name
+                                )} birthday today! Happy Birthday, ${
+                                    birthdayRec.first_name
+                                }! 🎉\n`;
+                        });
+                        console.log("Message is:");
+                        console.log(message);
+                        channel.send(message);
+                    }
                 }
             }
         );
@@ -125,4 +161,4 @@ const cmdHandler = (msgInfo) => {
     birthday["birthday" + utils.titleCase(fields[0])](msgInfo.channel);
 };
 
-module.exports = { cmdHandler };
+module.exports = { cmdHandler, Birthday };
