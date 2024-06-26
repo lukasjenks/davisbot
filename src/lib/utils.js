@@ -32,7 +32,12 @@ module.exports = {
             )
             .addField(
                 "Birthdays",
-                "!birthday add [@username] [first name] [date, e.g. 1996-06-30]\n\n!birthday list",
+                "!birthday add [@username] [first name] [date, e.g. 1996-06-30] => add a birthday, to get a reminder in #general on your birthday.\n\n!birthday list => list all birthdays being tracked.",
+                true
+            )
+            .addField(
+                "Forecasts",
+                "!temp [now/tomorrow/monday/tuesday/...] => get the weather forecast for the given day.",
                 true
             )
             .setColor("#f50057");
