@@ -13,6 +13,19 @@ module.exports = {
         authorListCmd: new RegExp(/^\s*!author\s+(list)\s*$/),
     },
 
+    counter: {
+        counterAddCmd: new RegExp(
+            /^\s*!counter\s+(add)\s+([^\s]+)\s+([^\s]{1}.+[^\s]{1})\s*$/
+        ),
+        counterIncrementCmd: new RegExp(
+            /^\s*!counter\s+(increment)\s+([^\s]+)\s*$/
+        ),
+        counterListCmd: new RegExp(/^\s*!counter\s+(list)\s*$/),
+        counterSetCmd: new RegExp(
+            /^\s*!counter\s+(set)\s+([^\s]+)\s+([0-9]+)\s*$/
+        ),
+    },
+
     emoji: {
         emojiCmd: new RegExp(
             /(?:^\s*[^\s]+\s*\*\s*[0-9]+\s*$)|(?:^\s*[0-9]+\s*\*\s*[^\s]+\s*$)/

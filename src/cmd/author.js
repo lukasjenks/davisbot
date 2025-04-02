@@ -1,10 +1,9 @@
-const Discord = require('discord.js');
-const db = require('../lib/db');
-const utils = require('../lib/utils');
+const Discord = require("discord.js");
+const db = require("../lib/db");
+const utils = require("../lib/utils");
 
 class Author {
-
-    constructor(subCmd, name=null, url=null, fullName=null) {
+    constructor(subCmd, name = null, url = null, fullName = null) {
         this.subCmd = subCmd;
         this.name = name ? name.toLowerCase() : null;
         this.fullName = fullName;
@@ -12,28 +11,41 @@ class Author {
     }
 
     authorAdd(channel) {
-        db.run('insert into author (command, full_name, picture_url) values (?, ?, ?)', [this.name, this.fullName, this.url], (err) => {
-            if (err) {
-                channel.send("An error occured. Usage: !authoradd [name] [picture url] \"[full name]\". Error: " + err.Error);
-                console.log(err);
-            } else {
-                channel.send("Successfully added author to DB. Quotes can now be added for this author.");
+        db.run(
+            "insert into author (command, full_name, picture_url) values (?, ?, ?)",
+            [this.name, this.fullName, this.url],
+            (err) => {
+                if (err) {
+                    channel.send(
+                        'An error occured. Usage: !authoradd [name] [picture url] "[full name]". Error: ' +
+                            err
+                    );
+                    console.log(err);
+                } else {
+                    channel.send(
+                        "Successfully added author to DB. Quotes can now be added for this author."
+                    );
+                }
             }
-        });
+        );
     }
 
     authorList(channel) {
-        db.all(`select command from author order by command`, [], (err, authorRecs) => {
-            if (err) {
-                channel.send("An error occured. Error: " + err.Error);
-            } else {
-                let message = "Available Authors in DB:\n";
-                authorRecs.forEach((authorRec) => {
-                    message = message + authorRec.command + "\n";
-                });
-                channel.send(message);
+        db.all(
+            `select command from author order by command`,
+            [],
+            (err, authorRecs) => {
+                if (err) {
+                    channel.send("An error occured. Error: " + err);
+                } else {
+                    let message = "Available Authors in DB:\n";
+                    authorRecs.forEach((authorRec) => {
+                        message = message + authorRec.command + "\n";
+                    });
+                    channel.send(message);
+                }
             }
-        });
+        );
     }
 }
 
@@ -54,7 +66,7 @@ const cmdHandler = (msgInfo) => {
         default:
             break;
     }
-    
+
     if (fields === null) {
         utils.invalidUsage("!author", msgInfo.channel);
         return;
@@ -66,6 +78,6 @@ const cmdHandler = (msgInfo) => {
 
     // Call appropriate class function dynamically - e.g. picAdd
     author["author" + utils.titleCase(fields[0])](msgInfo.channel);
-}
+};
 
 module.exports = { cmdHandler };

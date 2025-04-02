@@ -8,6 +8,12 @@ CREATE TABLE birthday (
     first_name TEXT NOT NULL UNIQUE,
     birthday DATE NOT NULL
 );
+CREATE TABLE counter (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	tag TEXT NOT NULL UNIQUE,
+	description TEXT NOT NULL,
+	count INTEGER NOT NULL,
+);
 
 -- +goose Down
 --DROP TABLE quote;

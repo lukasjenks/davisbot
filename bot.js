@@ -18,6 +18,7 @@ const ascii = require("./src/cmd/ascii");
 const emoji = require("./src/lib/emoji");
 const define = require("./src/cmd/define");
 const temp = require("./src/cmd/temp");
+const counter = require("./src/cmd/counter");
 
 const cmdModules = {
     quote,
@@ -29,6 +30,7 @@ const cmdModules = {
     ascii,
     define,
     temp,
+    counter,
 };
 
 const utils = require("./src/lib/utils");
@@ -50,12 +52,6 @@ client.login(token).catch((err) => {
 // Upon bot connection
 client.on("ready", () => {
     console.log("Connected to Discord.");
-    //client.channels.cache
-    //    .find((channel) => channel.name === "welcome")
-    //    .send(
-    //        "React with :hello_there: to toggle access to the #kenobi channel on. Replace your reaction with :old_ben: to toggle access off."
-    //    );
-    //client.channels.find("name","welcome").send("React with :hello_there: to toggle access to the #kenobi channel on. Replace your reaction with :old_ben: to toggle access off.");
 });
 
 // Schedule a job to run at 9:00 AM Edmonton time every day
